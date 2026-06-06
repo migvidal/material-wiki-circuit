@@ -1,0 +1,62 @@
+[
+  {
+    "title": "Jetpack Compose",
+    "summary": "Modern declarative UI toolkit for Android.",
+    "body": "Jetpack Compose is Android’s modern toolkit for building native UI. It simplifies and accelerates UI development on Android with less code, powerful tools, and intuitive Kotlin APIs.",
+    "mainImageUrl": "https://developer.android.com/images/logos/jetpack-compose-icon.svg"
+  },
+  {
+    "title": "Kotlin",
+    "summary": "A modern programming language for multiplatform development.",
+    "body": "Kotlin is a cross-platform, statically typed, general-purpose programming language with type inference. Kotlin is designed to interoperate fully with Java.",
+    "mainImageUrl": "https://kotlinlang.org/docs/images/kotlin-logo.png"
+  },
+  {
+    "title": "Circuit",
+    "summary": "A simple, reactive framework for building UI in Kotlin.",
+    "body": "Circuit is a framework for building reactive UIs in Kotlin, designed with Compose in mind. It provides a structured way to manage state and navigation in complex applications.",
+    "mainImageUrl": "https://slackhq.github.io/circuit/images/logo.png"
+  },
+  {
+    "title": "Material Design 3",
+    "summary": "The latest evolution of Material Design.",
+    "body": "Material 3 is the latest version of Google’s open-source design system. Design and build beautiful, usable products with Material 3.",
+    "mainImageUrl": "https://lh3.googleusercontent.com/pw/AJFCa6vP_P_P_P_P_P_P_P_P_P_P_P_P_P_P_P_P_P_P_P_P=w1000"
+  },
+  {
+    "title": "Coroutines",
+    "summary": "Asynchronous programming simplified.",
+    "body": "Coroutines are a design pattern for asynchronous programming that you can use on Android to simplify code that executes asynchronously.",
+    "mainImageUrl": "https://kotlinlang.org/docs/images/coroutines-logo.png"
+  },
+  {
+    "title": "Android Architecture Components",
+    "summary": "Libraries for building robust, testable, and maintainable apps.",
+    "body": "Architecture Components help you design robust, testable, and maintainable apps. They include Room, ViewModel, LiveData, and more.",
+    "mainImageUrl": "https://developer.android.com/images/topic/libraries/architecture/architecture-components-logo.png"
+  },
+  {
+    "title": "Dependency Injection with Hilt",
+    "summary": "Standard way to incorporate Dagger DI into Android apps.",
+    "body": "Hilt provides a standard way to use DI in your application by providing containers for every Android class in your project and managing their lifecycles automatically.",
+    "mainImageUrl": "https://developer.android.com/images/training/dependency-injection/hilt-logo.png"
+  },
+  {
+    "title": "Retrofit",
+    "summary": "Type-safe HTTP client for Android and Java.",
+    "body": "Retrofit turns your HTTP API into a Java interface. It makes it easy to consume JSON or XML data which is then parsed into objects.",
+    "mainImageUrl": "https://square.github.io/retrofit/static/logo.png"
+  },
+  {
+    "title": "Room Persistence Library",
+    "summary": "Fluent database access for Android.",
+    "body": "Room provides an abstraction layer over SQLite to allow fluent database access while harnessing the full power of SQLite.",
+    "mainImageUrl": "https://developer.android.com/images/topic/libraries/architecture/room-logo.png"
+  },
+  {
+    "title": "WorkManager",
+    "summary": "Reliable background task execution.",
+    "body": "WorkManager is the recommended solution for persistent work. It is background work that is scheduled to run even if the app exits or the device restarts.",
+    "mainImageUrl": "https://developer.android.com/images/topic/libraries/architecture/workmanager-logo.png"
+  }
+]
