@@ -5,5 +5,5 @@ import com.migvidal.wikicircuit.search.SearchResponse
 
 interface ApiService {
     suspend fun getArticle(title: String): FullArticle
-    suspend fun getSearch(): SearchResponse
+    suspend fun getSearch(term: String): SearchResponse
 }

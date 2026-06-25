@@ -1,103 +1,239 @@
 {
-  "batchcomplete": "",
   "continue": {
-    "sroffset": 10,
-    "continue": "-||"
+    "picontinue": 1134473,
+    "continue": "||pageterms"
   },
   "query": {
-    "searchinfo": {
-      "totalhits": 8028
-    },
-    "search": [
+    "pages": [
       {
+        "pageid": 1134473,
         "ns": 0,
-        "title": "Nelson Mandela",
-        "pageid": 21492751,
-        "size": 207093,
-        "wordcount": 24237,
-        "snippet": "<span class=\"searchmatch\">Nelson</span> Rolihlahla <span class=\"searchmatch\">Mandela</span> (/mænˈdɛlə/ man-DEL-ə, Xhosa: [xolíɬaɬa <span class=\"searchmatch\">mandɛ̂ːla</span>]; born Rolihlahla <span class=\"searchmatch\">Mandela</span>; 18 July 1918 – 5 December 2013) was a South African",
-        "timestamp": "2026-05-31T14:01:15Z"
+        "title": "Nyctalopia",
+        "index": 14,
+        "terms": {
+          "description": [
+            "condition making it difficult or impossible to see in relatively low light"
+          ]
+        }
       },
       {
+        "pageid": 1817152,
         "ns": 0,
-        "title": "Death and state funeral of Nelson Mandela",
-        "pageid": 41284488,
-        "size": 140065,
-        "wordcount": 14125,
-        "snippet": "On 5 December 2013, <span class=\"searchmatch\">Nelson</span> <span class=\"searchmatch\">Mandela</span>, the first president of South Africa to be elected in a fully representative democratic election, as well as the country&#039;s",
-        "timestamp": "2026-05-28T19:13:25Z"
+        "title": "NYC Ghosts & Flowers",
+        "index": 18,
+        "terms": {
+          "description": [
+            "2000 studio album by Sonic Youth"
+          ]
+        }
       },
       {
+        "pageid": 2271279,
         "ns": 0,
-        "title": "Nelson Mandela Stadium",
-        "pageid": 24642281,
-        "size": 14825,
-        "wordcount": 1152,
-        "snippet": "<span class=\"searchmatch\">Nelson</span> <span class=\"searchmatch\">Mandela</span> Stadium (Arabic: ملعب نيلسون مانديلا) is a sports stadium located in Baraki, suburb of Algiers, Algeria. The value of construction work",
-        "timestamp": "2025-12-26T07:26:23Z"
+        "title": "Nyctemera",
+        "index": 11,
+        "terms": {
+          "description": [
+            "genus of insects"
+          ]
+        }
       },
       {
+        "pageid": 2862921,
         "ns": 0,
-        "title": "Free Nelson Mandela",
-        "pageid": 7585993,
-        "size": 13692,
-        "wordcount": 1242,
-        "snippet": "&quot;<span class=\"searchmatch\">Nelson</span> <span class=\"searchmatch\">Mandela</span>&quot; (known in some versions as &quot;Free <span class=\"searchmatch\">Nelson</span> <span class=\"searchmatch\">Mandela</span>&quot;) is a song written by British musician Jerry Dammers, and performed by the band the",
-        "timestamp": "2026-03-26T05:30:14Z"
+        "title": "Nycteris",
+        "index": 20,
+        "terms": {
+          "description": [
+            "genus of mammals"
+          ]
+        }
       },
       {
+        "pageid": 2977006,
         "ns": 0,
-        "title": "Nelson Mandela Bay Metropolitan Municipality",
-        "pageid": 1720632,
-        "size": 17315,
-        "wordcount": 976,
-        "snippet": "The <span class=\"searchmatch\">Nelson</span> <span class=\"searchmatch\">Mandela</span> Bay Municipality (Xhosa: uMasipala oMbaxa i<span class=\"searchmatch\">Nelson</span> <span class=\"searchmatch\">Mandela</span> Bay; Afrikaans: <span class=\"searchmatch\">Nelson</span> Mandelabaai Metropolitaanse Munisipaliteit) is one",
-        "timestamp": "2026-05-13T13:07:24Z"
+        "title": "Nycticorax",
+        "index": 27,
+        "terms": {
+          "description": [
+            "genus of birds"
+          ]
+        }
       },
       {
+        "pageid": 12165428,
         "ns": 0,
-        "title": "Winnie Mandela",
-        "pageid": 33683,
-        "size": 82628,
-        "wordcount": 6970,
-        "snippet": "South African politician, anti-apartheid activist, and second wife of <span class=\"searchmatch\">Nelson</span> <span class=\"searchmatch\">Mandela</span>. During her political career, she served as a Member of Parliament from",
-        "timestamp": "2026-06-01T03:22:21Z"
+        "title": "Nyctophilus geoffroyi",
+        "index": 28,
+        "terms": {
+          "description": [
+            "species of mammal"
+          ]
+        }
       },
       {
+        "pageid": 12406511,
         "ns": 0,
-        "title": "Graça Machel",
-        "pageid": 712832,
-        "size": 28133,
-        "wordcount": 2224,
-        "snippet": "from 1975 until he died in 1986) and former President of South Africa <span class=\"searchmatch\">Nelson</span> <span class=\"searchmatch\">Mandela</span> (to whom she was married from 1998 until he died in 2013). She is a",
-        "timestamp": "2026-05-28T23:04:29Z"
+        "title": "Nyctibatrachus major",
+        "index": 12,
+        "terms": {
+          "description": [
+            "species of amphibian"
+          ]
+        }
       },
       {
+        "pageid": 22129972,
         "ns": 0,
-        "title": "Presidency of Nelson Mandela",
-        "pageid": 32300871,
-        "size": 12727,
-        "wordcount": 1173,
-        "snippet": "The presidency of <span class=\"searchmatch\">Nelson</span> <span class=\"searchmatch\">Mandela</span> began on 10 May 1994, when <span class=\"searchmatch\">Nelson</span> <span class=\"searchmatch\">Mandela</span>, an anti-apartheid activist, leader of uMkhonto we Sizwe, lawyer, and former",
-        "timestamp": "2026-03-16T21:48:46Z"
+        "title": "NYC Grand Prix",
+        "index": 25,
+        "thumbnail": {
+          "source": "https://upload.wikimedia.org/wikipedia/commons/thumb/5/50/Icahnstadium1.JPG/60px-Icahnstadium1.JPG",
+          "width": 50,
+          "height": 33
+        },
+        "terms": {
+          "description": [
+            "athletics tournament held in New York, United States"
+          ]
+        }
       },
       {
+        "pageid": 23158359,
         "ns": 0,
-        "title": "Marwan Barghouti",
-        "pageid": 71897,
-        "size": 68880,
-        "wordcount": 6733,
-        "snippet": "&#039;seen as <span class=\"searchmatch\">Nelson</span> <span class=\"searchmatch\">Mandela</span>&#039;&quot;. theweek. Retrieved 23 March 2025. Al Jazeera Staff. &quot;Will Israel release Marwan Barghouti, the &#039;Palestinian <span class=\"searchmatch\">Mandela</span>&#039;?&quot;. Al Jazeera",
-        "timestamp": "2026-05-31T23:52:00Z"
+        "title": "NYC Prep",
+        "index": 21,
+        "terms": {
+          "description": [
+            "television series"
+          ]
+        }
       },
       {
+        "pageid": 23254549,
         "ns": 0,
-        "title": "Nelson Mandela International Airport",
-        "pageid": 3373964,
-        "size": 12690,
-        "wordcount": 729,
-        "snippet": "<span class=\"searchmatch\">Nelson</span> <span class=\"searchmatch\">Mandela</span> International Airport (IATA: RAI, ICAO: GVNP), also known as Praia International Airport, is an international airport of Santiago Island",
-        "timestamp": "2026-05-13T14:26:06Z"
+        "title": "NYC (band)",
+        "index": 29,
+        "terms": {
+          "description": [
+            "Japanese pop band"
+          ]
+        }
+      },
+      {
+        "pageid": 23952467,
+        "ns": 0,
+        "title": "NYCAviation",
+        "index": 16,
+        "terms": {
+          "description": [
+            "website"
+          ]
+        }
+      },
+      {
+        "pageid": 26513834,
+        "ns": 0,
+        "title": "Nyctemera annulata",
+        "index": 19,
+        "terms": {
+          "description": [
+            "species of moth"
+          ]
+        }
+      },
+      {
+        "pageid": 34571351,
+        "ns": 0,
+        "title": "NYC 22",
+        "index": 13,
+        "terms": {
+          "description": [
+            "American television series"
+          ]
+        }
+      },
+      {
+        "pageid": 37923587,
+        "ns": 0,
+        "title": "Nycticebus kayan",
+        "index": 26,
+        "terms": {
+          "description": [
+            "species of mammal"
+          ]
+        }
+      },
+      {
+        "pageid": 37923727,
+        "ns": 0,
+        "title": "Nycticebus bancanus",
+        "index": 23,
+        "terms": {
+          "description": [
+            "species of mammal"
+          ]
+        }
+      },
+      {
+        "pageid": 37923764,
+        "ns": 0,
+        "title": "Nycticebus borneanus",
+        "index": 22,
+        "terms": {
+          "description": [
+            "species of primate"
+          ]
+        }
+      },
+      {
+        "pageid": 42722074,
+        "ns": 0,
+        "title": "NYChrisG",
+        "index": 15,
+        "thumbnail": {
+          "source": "https://upload.wikimedia.org/wikipedia/commons/thumb/9/9a/NYChrisG_at_EVO_2012_%28cropped%29.jpg/60px-NYChrisG_at_EVO_2012_%28cropped%29.jpg",
+          "width": 50,
+          "height": 66
+        },
+        "terms": {
+          "description": [
+            "American electronic sports player"
+          ]
+        }
+      },
+      {
+        "pageid": 52932873,
+        "ns": 0,
+        "title": "NYC, Hell 3:00 AM",
+        "index": 24,
+        "terms": {
+          "description": [
+            "2013 album by James Ferraro"
+          ]
+        }
+      },
+      {
+        "pageid": 60662231,
+        "ns": 0,
+        "title": "NYC Mesh",
+        "index": 17,
+        "terms": {
+          "description": [
+            "physical network of interconnected routers"
+          ]
+        }
+      },
+      {
+        "pageid": 68538171,
+        "ns": 0,
+        "title": "NYC Epicenters 9/11→2021½",
+        "index": 30,
+        "terms": {
+          "description": [
+            "American documentary miniseries"
+          ]
+        }
       }
     ]
   }

@@ -10,5 +10,5 @@ class SearchRepository @Inject constructor(val api: ApiService) {
     private val _response = MutableStateFlow<Result<SearchResponse>?>(null)
     val response = _response.asStateFlow()
 
-    suspend fun fetchSearch() = _response.update { runCatching { api.getSearch() } }
+    suspend fun fetchSearch(term: String) = _response.update { runCatching { api.getSearch(term) } }
 }

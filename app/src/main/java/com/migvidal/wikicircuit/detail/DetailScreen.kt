@@ -14,9 +14,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.migvidal.wikicircuit.SharedElementKey
-import com.migvidal.wikicircuit.core.customSharedBounds
-import com.migvidal.wikicircuit.core.customSharedElement
+import com.migvidal.wikicircuit.core.ui.SharedElementKey
+import com.migvidal.wikicircuit.core.ui.customSharedBounds
+import com.migvidal.wikicircuit.core.ui.customSharedElement
 import com.slack.circuit.codegen.annotations.CircuitInject
 import com.slack.circuit.runtime.CircuitUiState
 import com.slack.circuit.runtime.Navigator
@@ -53,7 +53,7 @@ data class DetailScreen(val title: String) : Screen {
 
 @OptIn(ExperimentalSharedTransitionApi::class)
 @Composable
-fun Detail(state: DetailScreen.State, modifier: Modifier = Modifier) {
+fun DetailUi(state: DetailScreen.State, modifier: Modifier = Modifier) {
     SharedElementTransitionScope {
         Card(
             modifier = modifier

@@ -1,0 +1,37 @@
+package com.migvidal.wikicircuit.feed
+
+import androidx.compose.runtime.Composable
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.migvidal.wikicircuit.detail.DetailScreen
+import com.slack.circuit.codegen.annotations.CircuitInject
+import com.slack.circuit.runtime.Navigator
+import com.slack.circuit.runtime.presenter.Presenter
+import dagger.assisted.Assisted
+import dagger.assisted.AssistedFactory
+import dagger.assisted.AssistedInject
+import dagger.hilt.components.SingletonComponent
+
+class FeedPresenter @AssistedInject constructor(
+    @Assisted val screen: FeedScreen,
+    @Assisted val navigator: Navigator,
+    val repository: FeedRepository,
+) : Presenter<FeedScreen.State> {
+
+    @Composable
+    override fun present(): FeedScreen.State {
+        val response = repository.response.collectAsStateWithLifecycle().value
+        return FeedScreen.State(response = response) {
+            when (it) {
+                is FeedScreen.State.Event.ItemClicked -> {
+                    navigator.goTo(DetailScreen(it.title))
+                }
+            }
+        }
+    }
+
+    @CircuitInject(FeedScreen::class, SingletonComponent::class)
+    @AssistedFactory
+    fun interface Factory {
+        fun create(screen: FeedScreen, navigator: Navigator): FeedPresenter
+    }
+}

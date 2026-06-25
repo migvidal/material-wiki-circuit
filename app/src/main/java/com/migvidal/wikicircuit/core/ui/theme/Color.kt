@@ -1,4 +1,4 @@
-package com.migvidal.wikicircuit.ui.theme
+package com.migvidal.wikicircuit.core.ui.theme
 
 import androidx.compose.ui.graphics.Color
 

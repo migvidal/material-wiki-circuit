@@ -1,7 +1,6 @@
 package com.migvidal.wikicircuit.search
 
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.migvidal.wikicircuit.detail.DetailScreen
@@ -15,7 +14,7 @@ import dagger.hilt.components.SingletonComponent
 import kotlinx.coroutines.launch
 
 class SearchPresenter @AssistedInject constructor(
-    @Assisted val feedScreen: SearchScreen,
+    @Assisted val screen: SearchScreen,
     @Assisted val navigator: Navigator,
     val repository: SearchRepository,
 ) :
@@ -26,18 +25,14 @@ class SearchPresenter @AssistedInject constructor(
         val scope = rememberCoroutineScope()
         val response = repository.response.collectAsStateWithLifecycle().value
 
-        LaunchedEffect(Unit) {
-            repository.fetchSearch()
-        }
-
         return SearchScreen.State(response = response) {
             when (it) {
                 is SearchScreen.State.Event.ArticleClicked -> {
                     navigator.goTo(DetailScreen(it.title))
                 }
 
-                SearchScreen.State.Event.Refresh -> {
-                    scope.launch { repository.fetchSearch() }
+                is SearchScreen.State.Event.Search -> {
+                    scope.launch { repository.fetchSearch(it.term) }
                 }
             }
         }

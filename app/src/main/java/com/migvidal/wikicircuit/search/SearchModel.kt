@@ -3,7 +3,6 @@ package com.migvidal.wikicircuit.search
 import com.migvidal.wikicircuit.core.api.common_model.Page
 import com.migvidal.wikicircuit.core.api.common_model.Query
 import kotlinx.serialization.Serializable
-import kotlinx.serialization.Transient
 
 @Serializable
 data class SearchResponse(
@@ -16,12 +15,18 @@ data class SearchResponse(
     @Serializable
     data class ResultPage(
         override val title: String,
-        val ns: Int,
         val pageid: Int? = null,
+        val ns: Int,
         val index: Int,
+        val thumbnail: Thumbnail? = null,
         val terms: Terms? = null,
-        @Transient val allImages: List<String> = emptyList()
     ) : Page {
+        @Serializable
+        data class Thumbnail(
+            val source: String,
+            val width: Int,
+            val height: Int,
+        )
 
         @Serializable
         data class Terms(

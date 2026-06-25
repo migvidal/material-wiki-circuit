@@ -1,11 +1,13 @@
-package com.migvidal.wikicircuit.search
+package com.migvidal.wikicircuit.feed
 
 import android.os.Parcel
 import android.os.Parcelable
+import com.migvidal.wikicircuit.search.SearchResponse
+import com.migvidal.wikicircuit.search.SearchScreen
 import com.slack.circuit.runtime.CircuitUiState
 import com.slack.circuit.runtime.screen.Screen
 
-data object SearchScreen : Screen {
+object FeedScreen: Screen {
     override fun describeContents(): Int = 0
     override fun writeToParcel(dest: Parcel, flags: Int) {}
 
@@ -16,12 +18,11 @@ data object SearchScreen : Screen {
     }
 
     data class State(
-        val response: Result<SearchResponse>?,
+        val response: Result<String>?,
         val eventSink: (Event) -> Unit,
     ) : CircuitUiState {
         sealed interface Event {
-            data class ArticleClicked(val title: String) : Event
-            data class Search(val term: String) : Event
+            data class ItemClicked(val title: String) : Event
         }
     }
 }

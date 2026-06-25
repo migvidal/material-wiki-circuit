@@ -1,4 +1,4 @@
-package com.migvidal.wikicircuit.core
+package com.migvidal.wikicircuit.core.ui
 
 import androidx.compose.animation.core.Spring
 import androidx.compose.animation.core.spring
@@ -6,7 +6,7 @@ import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import com.migvidal.wikicircuit.SharedElementKey
+import com.migvidal.wikicircuit.core.ui.SharedElementKey
 import com.slack.circuit.sharedelements.SharedElementTransitionScope
 
 @Composable

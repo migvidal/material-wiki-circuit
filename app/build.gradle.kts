@@ -33,7 +33,7 @@ android {
             )
         }
         create("mocked") {
-            initWith(getByName("release"))
+            initWith(getByName("debug"))
         }
     }
     compileOptions {
@@ -63,11 +63,11 @@ dependencies {
     implementation(libs.circuit.foundation)
     implementation(libs.kotlinx.serialization.json)
     implementation(libs.hilt.android)
-    implementation("io.ktor:ktor-client-core:3.5.0")
-    implementation("io.ktor:ktor-client-cio:3.5.0")
-    implementation("ch.qos.logback:logback-classic:1.5.34")
-    implementation("io.ktor:ktor-client-content-negotiation:3.5.0")
-    implementation("io.ktor:ktor-serialization-kotlinx-json:3.5.0")
+    implementation(libs.ktor.client.core)
+    implementation(libs.ktor.client.cio)
+    implementation(libs.logback.classic)
+    implementation(libs.ktor.client.content.negotiation)
+    implementation(libs.ktor.serialization.kotlinx.json)
     api(libs.circuit.codegen.annotations)
     ksp(libs.circuit.codegen)
     ksp(libs.hilt.android.compiler)

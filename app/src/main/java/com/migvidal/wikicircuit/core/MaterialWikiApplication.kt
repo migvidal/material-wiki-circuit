@@ -1,7 +1,7 @@
-package com.migvidal.wikicircuit
+package com.migvidal.wikicircuit.core
 
 import android.app.Application
 import dagger.hilt.android.HiltAndroidApp
 
 @HiltAndroidApp
-class WikiCircuitApplication: Application()
+class MaterialWikiApplication: Application()

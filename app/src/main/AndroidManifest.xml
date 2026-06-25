@@ -5,7 +5,7 @@
     <uses-permission android:name="android.permission.INTERNET" />
 
     <application
-        android:name=".WikiCircuitApplication"
+        android:name=".core.MaterialWikiApplication"
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
         android:fullBackupContent="@xml/backup_rules"
@@ -15,10 +15,11 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.WikiCircuit">
         <activity
-            android:name=".MainActivity"
+            android:name=".core.ui.MainActivity"
             android:exported="true"
             android:label="@string/app_name"
-            android:theme="@style/Theme.WikiCircuit">
+            android:theme="@style/Theme.WikiCircuit"
+            android:configChanges="orientation|screenSize">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
