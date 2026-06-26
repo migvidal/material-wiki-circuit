@@ -1,0 +1,70 @@
+{
+  "continue": {
+    "imcontinue": "645042|Brighton_beach_(7434138858).jpg",
+    "continue": "||pageprops"
+  },
+  "query": {
+    "normalized": [
+      {
+        "fromencoded": false,
+        "from": "New_York_City",
+        "to": "New York City"
+      }
+    ],
+    "pages": [
+      {
+        "pageid": 645042,
+        "ns": 0,
+        "title": "New York City",
+        "images": [
+          {
+            "ns": 6,
+            "title": "File:1232-42 Dean Street Crown Heights.jpg"
+          },
+          {
+            "ns": 6,
+            "title": "File:5 Boroughs Labels New York City Map.svg"
+          },
+          {
+            "ns": 6,
+            "title": "File:5th Avenue 9304.JPG"
+          },
+          {
+            "ns": 6,
+            "title": "File:67º Período de Sesiones de la Asamblea General de Naciones Unidas (8020913157) (cropped).jpg"
+          },
+          {
+            "ns": 6,
+            "title": "File:74th St shopping Jax Hts jeh.jpg"
+          },
+          {
+            "ns": 6,
+            "title": "File:A view of Fort George with the city of New York, from the SW.jpg"
+          },
+          {
+            "ns": 6,
+            "title": "File:Arthur ashe stadium interior.jpg"
+          },
+          {
+            "ns": 6,
+            "title": "File:At New York, USA 2017 119.jpg"
+          },
+          {
+            "ns": 6,
+            "title": "File:Barclays Center 1.jpg"
+          },
+          {
+            "ns": 6,
+            "title": "File:BattleofLongisland.jpg"
+          }
+        ],
+        "pageprops": {
+          "kartographer_frames": "1",
+          "page_image_free": "View_of_Empire_State_Building_from_Rockefeller_Center_New_York_City_dllu_(cropped).jpg",
+          "wikibase-shortdesc": "Most populous city in the United States",
+          "wikibase_item": "Q60"
+        }
+      }
+    ]
+  }
+}

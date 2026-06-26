@@ -41,7 +41,7 @@ data class DetailScreen(val title: String) : Screen {
     }
 
     data class State(
-        val response: Result<FullArticle?>,
+        val response: Result<ArticleResponse?>,
         val isFavorite: Boolean,
         val eventSink: (Event) -> Unit,
     ) : CircuitUiState {
@@ -69,7 +69,7 @@ fun DetailUi(state: DetailScreen.State, modifier: Modifier = Modifier) {
                     if (articleResponse == null) {
                         Text(text = "Nothing selected")
                     } else {
-                        DetailContent(article = articleResponse)
+                        DetailContent(articleResponse = articleResponse)
                     }
 
                 }
@@ -81,29 +81,31 @@ fun DetailUi(state: DetailScreen.State, modifier: Modifier = Modifier) {
 
 @Composable
 private fun SharedElementTransitionScope.DetailContent(
-    article: FullArticle,
+    articleResponse: ArticleResponse,
     modifier: Modifier = Modifier
 ) {
     Column(modifier = modifier) {
+        val page = articleResponse.query.pages.firstOrNull() ?: return
+        val title = page.title
         Text(
             modifier = Modifier.customSharedBounds(
                 this@DetailContent,
                 SharedElementKey(
-                    id = article.title,
+                    id = title,
                     type = SharedElementKey.Type.Title,
                 )
-            ), text = article.title, style = MaterialTheme.typography.displayMedium
+            ), text = title, style = MaterialTheme.typography.displayMedium
         )
+        val summary = page.pageprops.wikibaseShortDesc
         Text(
             modifier = Modifier.customSharedBounds(
                 this@DetailContent,
                 SharedElementKey(
-                    id = article.summary,
+                    id = summary,
                     type = SharedElementKey.Type.Description,
                 )
-            ), text = article.summary, fontWeight = FontWeight.Bold
+            ), text = summary, fontWeight = FontWeight.Bold
         )
-        Text(text = article.body)
     }
 }
 

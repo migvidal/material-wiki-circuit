@@ -3,8 +3,7 @@ package com.migvidal.wikicircuit.core.api.api_service
 import android.content.Context
 import android.content.res.Resources
 import com.migvidal.wikicircuit.R
-import com.migvidal.wikicircuit.core.api.exception.NullResponseException
-import com.migvidal.wikicircuit.detail.FullArticle
+import com.migvidal.wikicircuit.detail.ArticleResponse
 import com.migvidal.wikicircuit.search.SearchResponse
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.serialization.ExperimentalSerializationApi
@@ -17,10 +16,9 @@ class FakeOfflineApi @Inject constructor (@param:ApplicationContext private val 
     ApiService {
     private val resources: Resources = context.resources
 
-    override suspend fun getArticle(title: String): FullArticle {
-        val inputStream = resources.openRawResource(R.raw.articles)
-        val articles = Json.decodeFromStream<List<FullArticle>>(inputStream)
-        return articles.find { it.title == title } ?: throw NullResponseException("article")
+    override suspend fun getArticle(title: String): ArticleResponse {
+        val inputStream = resources.openRawResource(R.raw.article)
+        return Json.decodeFromStream<ArticleResponse>(inputStream)
     }
 
     override suspend fun getSearch(term: String): SearchResponse {
