@@ -8,6 +8,7 @@ import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.annotation.DrawableRes
 import androidx.annotation.StringRes
+import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.ExperimentalSharedTransitionApi
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.padding
@@ -34,6 +35,7 @@ import com.slack.circuit.foundation.CircuitCompositionLocals
 import com.slack.circuit.foundation.NavigableCircuitContent
 import com.slack.circuit.foundation.rememberCircuitNavigator
 import com.slack.circuit.runtime.navigation.canGoBack
+import com.slack.circuit.runtime.navigation.currentScreen
 import com.slack.circuit.runtime.screen.Screen
 import com.slack.circuit.sharedelements.SharedElementTransitionLayout
 import dagger.hilt.android.AndroidEntryPoint
@@ -67,7 +69,7 @@ class MainActivity : ComponentActivity() {
                 rememberSaveableBackStack(initialScreens = topLevelDestinations.map { it.screen })
             val navigator = rememberCircuitNavigator(backStack)
             WikiCircuitTheme {
-                val currentScreen = backStack.currentRecord?.screen
+                val currentScreen = backStack.currentScreen
                 Scaffold(
                     modifier = modifier,
                     topBar = {
@@ -78,10 +80,13 @@ class MainActivity : ComponentActivity() {
                         )
                     },
                     bottomBar = {
-                        BottomBar(
-                            currentScreen = currentScreen,
-                            onItemClicked = { navigator.goTo(it.screen) },
-                        )
+                        val bottomBarVisible = currentScreen !is DetailScreen
+                        AnimatedVisibility(visible = bottomBarVisible) {
+                            BottomBar(
+                                currentScreen = currentScreen,
+                                onItemClicked = { navigator.goTo(it.screen) },
+                            )
+                        }
                     }
                 ) { padding ->
                     Box(modifier = Modifier.padding(padding)) {

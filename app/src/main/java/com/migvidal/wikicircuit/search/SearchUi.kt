@@ -25,9 +25,11 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import com.migvidal.wikicircuit.core.ui.RequestStatus
 import com.migvidal.wikicircuit.core.ui.SharedElementKey
 import com.migvidal.wikicircuit.core.ui.customSharedBounds
 import com.migvidal.wikicircuit.core.ui.customSharedElement
+import com.migvidal.wikicircuit.core.ui.shimmer
 import com.migvidal.wikicircuit.search.SearchScreen.State.Event.ArticleClicked
 import com.migvidal.wikicircuit.search.SearchScreen.State.Event.Search
 import com.slack.circuit.sharedelements.SharedElementTransitionScope
@@ -72,27 +74,20 @@ fun SearchUi(state: SearchScreen.State, modifier: Modifier = Modifier) {
         }
     ) {
         val response = state.response
-        val isLoading = response != null && !response.isFailure && !response.isSuccess
-        if (isLoading) {
-            Text(text = "Loading")
-            return@SearchBar
-        }
+        when (val status = response.status) {
+            is RequestStatus.Failure -> Text(status.message)
+            RequestStatus.Loading -> {
+                SkeletonResults()
+            }
 
-        response ?: run {
-            Text(text = "No results")
-            return@SearchBar
-        }
-
-        response.onSuccess { searchResponse ->
-            val pages = searchResponse.query?.pages ?: return@onSuccess
-            Results(
-                results = pages,
-                onResultClicked = { state.eventSink(ArticleClicked(it.title)) }
-            )
-        }
-
-        response.onFailure {
-            Text(text = it.message ?: "Error")
+            RequestStatus.Success -> {
+                val data = response.data ?: return@SearchBar
+                val pages = data.query?.pages ?: return@SearchBar
+                Results(
+                    results = pages,
+                    onResultClicked = { state.eventSink(ArticleClicked(it.title)) }
+                )
+            }
         }
     }
 }
@@ -105,7 +100,16 @@ private fun Results(
 ) {
     LazyColumn(modifier = modifier) {
         items(results) { result ->
-            ResultItem(result = result, onClick = onResultClicked)
+            ResultItem(result = result, onClick = { onResultClicked(it ?: return@ResultItem) })
+        }
+    }
+}
+
+@Composable
+fun SkeletonResults(modifier: Modifier = Modifier) {
+    LazyColumn(modifier = modifier) {
+        items(6) {
+            ResultItem(result = null, onClick = {})
         }
     }
 }
@@ -113,10 +117,12 @@ private fun Results(
 @OptIn(ExperimentalSharedTransitionApi::class)
 @Composable
 private fun ResultItem(
-    result: SearchResponse.ResultPage,
-    onClick: (SearchResponse.ResultPage) -> Unit,
+    result: SearchResponse.ResultPage?,
+    onClick: (SearchResponse.ResultPage?) -> Unit,
     modifier: Modifier = Modifier,
 ) {
+    val showSkeleton = result == null
+    val shimmer = if (showSkeleton) Modifier.shimmer() else Modifier
     SharedElementTransitionScope {
         Card(
             modifier = modifier
@@ -129,30 +135,47 @@ private fun ResultItem(
             onClick = { onClick(result) }) {
             Column(modifier = Modifier.padding(16.dp)) {
                 Text(
-                    modifier = Modifier.customSharedBounds(
-                        this@SharedElementTransitionScope,
-                        SharedElementKey(
-                            id = result.title,
-                            type = SharedElementKey.Type.Title,
+                    modifier = Modifier
+                        .customSharedBounds(
+                            this@SharedElementTransitionScope,
+                            SharedElementKey(
+                                id = result?.title,
+                                type = SharedElementKey.Type.Title,
+                            )
                         )
-                    ),
-                    text = result.title,
+                        .then(
+                            if (showSkeleton) Modifier
+                                .fillMaxWidth(1 / 3f)
+                                .padding(vertical = 8.dp) else Modifier
+                        )
+                        .then(shimmer),
+                    text = result?.title ?: "",
                     style = MaterialTheme.typography.titleSmall,
                 )
 
-                val description = result.terms?.description?.firstOrNull() ?: "-"
-                Text(
-                    modifier = Modifier.customSharedBounds(
-                        this@SharedElementTransitionScope,
-                        SharedElementKey(
-                            id = description,
-                            type = SharedElementKey.Type.Description,
-                        )
-                    ),
-                    text = description,
-                )
+                val description = result?.terms?.description?.firstOrNull() ?: ""
+                if (showSkeleton) {
+                    Text(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(vertical = 8.dp)
+                            .shimmer(),
+                        text = ""
+                    )
+                } else {
+                    Text(
+                        modifier = Modifier
+                            .customSharedBounds(
+                                this@SharedElementTransitionScope,
+                                SharedElementKey(
+                                    id = description,
+                                    type = SharedElementKey.Type.Description,
+                                )
+                            ),
+                        text = description,
+                    )
+                }
             }
         }
     }
 }
-

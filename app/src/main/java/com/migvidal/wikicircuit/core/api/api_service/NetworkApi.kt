@@ -10,18 +10,36 @@ import kotlinx.serialization.ExperimentalSerializationApi
 import javax.inject.Inject
 
 @OptIn(ExperimentalSerializationApi::class)
-class NetworkApi @Inject constructor (private val httpClient: HttpClient):
+class NetworkApi @Inject constructor(private val httpClient: HttpClient) :
     ApiService {
 
     override suspend fun getArticle(title: String): ArticleResponse {
-        return httpClient.get("https://en.wikipedia.org/w/api.php?action=query&format=json&formatversion=2&prop=images|info|pageprops") {
-            parameter(key = "titles", value = title)
+        return httpClient.get("") {
+            url {
+                parameters.apply {
+                    append(name = "prop", value = "images|info|pageprops")
+                    append(name = "titles", value = title)
+                }
+            }
         }.body<ArticleResponse>()
     }
 
     override suspend fun getSearch(term: String): SearchResponse {
-        return httpClient.get("https://en.wikipedia.org/w/api.php?action=query&format=json&formatversion=2&generator=prefixsearch&prop=pageimages|pageterms&piprop=thumbnail&pithumbsize=50&pilimit=10&redirects=true&wbptterms=description&gpslimit=20&gpsoffset=0") {
-            parameter(key = "gpssearch", value = term)
+        return httpClient.get("") {
+            url {
+                parameters.apply {
+                    append(name = "generator", value = "prefixsearch")
+                    append(name = "prop", value = "pageimages|pageterms")
+                    append(name = "piprop", value = "thumbnail")
+                    append(name = "pithumbsize", value = "50")
+                    append(name = "pilimit", value = "10")
+                    append(name = "redirects", value = "true")
+                    append(name = "wbptterms", value = "description")
+                    append(name = "gpslimit", value = "20")
+                    append(name = "gpsoffset", value = "0")
+                    append(name = "gpssearch", value = term)
+                }
+            }
         }.body<SearchResponse>()
     }
 }

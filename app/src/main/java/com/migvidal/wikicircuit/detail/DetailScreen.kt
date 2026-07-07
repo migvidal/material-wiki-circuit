@@ -14,6 +14,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.migvidal.wikicircuit.core.ui.RequestStatus
 import com.migvidal.wikicircuit.core.ui.SharedElementKey
 import com.migvidal.wikicircuit.core.ui.customSharedBounds
 import com.migvidal.wikicircuit.core.ui.customSharedElement
@@ -41,7 +42,7 @@ data class DetailScreen(val title: String) : Screen {
     }
 
     data class State(
-        val response: Result<ArticleResponse?>,
+        val response: CachedArticleResponse,
         val isFavorite: Boolean,
         val eventSink: (Event) -> Unit,
     ) : CircuitUiState {
@@ -65,13 +66,17 @@ fun DetailUi(state: DetailScreen.State, modifier: Modifier = Modifier) {
         ) {
             Column(modifier = Modifier.padding(16.dp)) {
                 val response = state.response
-                response.onSuccess { articleResponse ->
-                    if (articleResponse == null) {
-                        Text(text = "Nothing selected")
-                    } else {
-                        DetailContent(articleResponse = articleResponse)
+                when(response.status) {
+                    is RequestStatus.Failure -> TODO()
+                    RequestStatus.Loading -> TODO()
+                    RequestStatus.Success -> {
+                        val data = response.data
+                        if (data == null) {
+                            Text(text = "Nothing selected")
+                        } else {
+                            DetailContent(articleResponse = data)
+                        }
                     }
-
                 }
 
             }
@@ -117,7 +122,7 @@ class DetailPresenter @AssistedInject constructor(
 
     @Composable
     override fun present(): DetailScreen.State {
-        val article = articleRepository.article.collectAsStateWithLifecycle().value
+        val article = articleRepository.response.collectAsStateWithLifecycle().value
         val title = detailScreen.title
 
         LaunchedEffect(title) {

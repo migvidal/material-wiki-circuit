@@ -16,7 +16,7 @@ data object SearchScreen : Screen {
     }
 
     data class State(
-        val response: Result<SearchResponse>?,
+        val response: CachedSearchResponse,
         val eventSink: (Event) -> Unit,
     ) : CircuitUiState {
         sealed interface Event {
