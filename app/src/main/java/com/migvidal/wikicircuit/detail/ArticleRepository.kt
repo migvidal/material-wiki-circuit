@@ -1,5 +1,6 @@
 package com.migvidal.wikicircuit.detail
 
+import android.util.Log
 import com.migvidal.wikicircuit.core.api.api_service.ApiService
 import com.migvidal.wikicircuit.core.ui.CachedResponse
 import com.migvidal.wikicircuit.core.ui.RequestStatus
@@ -24,10 +25,12 @@ class ArticleRepository @Inject constructor(val api: ApiService) {
                 CachedArticleResponse(data = data)
             }
         }.onFailure { throwable ->
+            val message = "Could not load article"
+            Log.e("ArticleRepository", message, throwable)
             _response.update {
                 it.copy(
                     status = RequestStatus.Failure(
-                        message = "Could not load article",
+                        message = message,
                         throwable = throwable,
                     )
                 )
@@ -37,7 +40,7 @@ class ArticleRepository @Inject constructor(val api: ApiService) {
 }
 
 data class CachedArticleResponse(
-    override val data: ArticleResponse? = null,
+    override val data: ArticleModel? = null,
     override val lastUpdatedAt: Instant = Instant.now(),
     override val status: RequestStatus = RequestStatus.Success
-) : CachedResponse<ArticleResponse?>
+) : CachedResponse<ArticleModel?>

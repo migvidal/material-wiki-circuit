@@ -65,8 +65,9 @@ class MainActivity : ComponentActivity() {
     @Composable
     private fun MainContent(modifier: Modifier = Modifier) {
         CircuitCompositionLocals(circuit) {
+            val topLevelScreens = topLevelDestinations.map { it.screen }
             val backStack =
-                rememberSaveableBackStack(initialScreens = topLevelDestinations.map { it.screen })
+                rememberSaveableBackStack(initialScreens = topLevelScreens)
             val navigator = rememberCircuitNavigator(backStack)
             WikiCircuitTheme {
                 val currentScreen = backStack.currentScreen
@@ -75,7 +76,7 @@ class MainActivity : ComponentActivity() {
                     topBar = {
                         TopBar(
                             currentScreen = currentScreen,
-                            canGoBack = backStack.canGoBack,
+                            canGoBack = backStack.canGoBack && backStack.currentScreen !in topLevelScreens,
                             goBack = { navigator.pop() },
                         )
                     },
@@ -116,7 +117,7 @@ fun TopBar(
         title = {
             Text(
                 text = when (currentScreen) {
-                    SearchScreen -> stringResource(R.string.feed)
+                    SearchScreen -> stringResource(R.string.search)
                     DetailScreen -> stringResource(R.string.detail)
                     else -> ""
                 }

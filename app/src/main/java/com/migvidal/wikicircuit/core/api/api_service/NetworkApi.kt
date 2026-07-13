@@ -1,19 +1,24 @@
 package com.migvidal.wikicircuit.core.api.api_service
 
-import com.migvidal.wikicircuit.detail.ArticleResponse
-import com.migvidal.wikicircuit.search.SearchResponse
+import androidx.compose.ui.text.intl.Locale
+import com.migvidal.wikicircuit.detail.ArticleModel
+import com.migvidal.wikicircuit.feed.FeedModel
+import com.migvidal.wikicircuit.search.SearchModel
 import io.ktor.client.HttpClient
 import io.ktor.client.call.body
 import io.ktor.client.request.get
-import io.ktor.client.request.parameter
+import io.ktor.http.appendPathSegments
 import kotlinx.serialization.ExperimentalSerializationApi
+import java.time.Instant
+import java.time.LocalDate
+import java.time.temporal.ChronoField
 import javax.inject.Inject
 
 @OptIn(ExperimentalSerializationApi::class)
 class NetworkApi @Inject constructor(private val httpClient: HttpClient) :
     ApiService {
 
-    override suspend fun getArticle(title: String): ArticleResponse {
+    override suspend fun getArticle(title: String): ArticleModel {
         return httpClient.get("") {
             url {
                 parameters.apply {
@@ -21,10 +26,10 @@ class NetworkApi @Inject constructor(private val httpClient: HttpClient) :
                     append(name = "titles", value = title)
                 }
             }
-        }.body<ArticleResponse>()
+        }.body<ArticleModel>()
     }
 
-    override suspend fun getSearch(term: String): SearchResponse {
+    override suspend fun getSearch(term: String): SearchModel {
         return httpClient.get("") {
             url {
                 parameters.apply {
@@ -40,6 +45,22 @@ class NetworkApi @Inject constructor(private val httpClient: HttpClient) :
                     append(name = "gpssearch", value = term)
                 }
             }
-        }.body<SearchResponse>()
+        }.body<SearchModel>()
     }
+
+    override suspend fun getFeed(forDate: LocalDate): FeedModel {
+        return httpClient.get("https://api.wikimedia.org/feed/v1/wikipedia/en/featured/") {
+            url {
+                val yyyy = forDate.year.toString()
+                val mm = forDate.monthValue.paddedLeading()
+                val dd = forDate.dayOfMonth.paddedLeading()
+                appendPathSegments(yyyy, mm, dd)
+            }
+        }.body<FeedModel>()
+    }
+}
+
+private fun Int.paddedLeading(): String {
+    val locale = Locale.current.platformLocale
+    return String.format(locale = locale, format = "%02d", this)
 }

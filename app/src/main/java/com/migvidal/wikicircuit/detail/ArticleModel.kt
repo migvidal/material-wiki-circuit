@@ -6,7 +6,7 @@ import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class ArticleResponse(
+data class ArticleModel(
     val `continue`: Continue? = null,
     val query: Query<PageWithImages>,
 ) {
@@ -30,7 +30,7 @@ data class ArticleResponse(
 
         @Serializable
         data class PageProps(
-            @SerialName("page_image_free") val pageImageFree: String,
+            @SerialName("page_image_free") val pageImageFree: String? = null,
             @SerialName("wikibase-shortdesc") val wikibaseShortDesc: String,
             @SerialName("wikibase_item") val wikibaseItem: String,
         )

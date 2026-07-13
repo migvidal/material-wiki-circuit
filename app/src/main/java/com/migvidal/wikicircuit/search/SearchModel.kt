@@ -5,7 +5,7 @@ import com.migvidal.wikicircuit.core.api.common_model.Query
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class SearchResponse(
+data class SearchModel(
     val `continue`: Continue? = null,
     val query: Query<ResultPage>? = null,
 ) {

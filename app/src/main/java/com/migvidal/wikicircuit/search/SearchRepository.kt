@@ -1,5 +1,6 @@
 package com.migvidal.wikicircuit.search
 
+import android.util.Log
 import com.migvidal.wikicircuit.core.api.api_service.ApiService
 import com.migvidal.wikicircuit.core.ui.CachedResponse
 import com.migvidal.wikicircuit.core.ui.RequestStatus
@@ -24,11 +25,13 @@ class SearchRepository @Inject constructor(val api: ApiService) {
                 }
             }
             .onFailure { throwable ->
+                val message = "Error fetching search results"
+                Log.e("SearchRepository", message, throwable)
                 _response.update {
                     it.copy(
                         status = RequestStatus.Failure(
                             throwable = throwable,
-                            message = "Error fetching search results"
+                            message = message,
                         )
                     )
                 }
@@ -37,8 +40,8 @@ class SearchRepository @Inject constructor(val api: ApiService) {
 }
 
 data class CachedSearchResponse(
-    override val data: SearchResponse? = null,
+    override val data: SearchModel? = null,
     override val lastUpdatedAt: Instant = Instant.now(),
     override val status: RequestStatus = RequestStatus.Success,
 ) :
-    CachedResponse<SearchResponse?>
+    CachedResponse<SearchModel?>

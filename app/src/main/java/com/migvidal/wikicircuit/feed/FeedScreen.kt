@@ -2,7 +2,6 @@ package com.migvidal.wikicircuit.feed
 
 import android.os.Parcel
 import android.os.Parcelable
-import com.migvidal.wikicircuit.search.SearchResponse
 import com.migvidal.wikicircuit.search.SearchScreen
 import com.slack.circuit.runtime.CircuitUiState
 import com.slack.circuit.runtime.screen.Screen
@@ -18,7 +17,7 @@ object FeedScreen: Screen {
     }
 
     data class State(
-        val response: Result<String>?,
+        val response: CachedFeedResponse,
         val eventSink: (Event) -> Unit,
     ) : CircuitUiState {
         sealed interface Event {

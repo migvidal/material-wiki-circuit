@@ -1,6 +1,7 @@
 package com.migvidal.wikicircuit.feed
 
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.migvidal.wikicircuit.detail.DetailScreen
 import com.slack.circuit.codegen.annotations.CircuitInject
@@ -20,6 +21,11 @@ class FeedPresenter @AssistedInject constructor(
     @Composable
     override fun present(): FeedScreen.State {
         val response = repository.response.collectAsStateWithLifecycle().value
+
+        LaunchedEffect(Unit) {
+            repository.fetchFeed()
+        }
+
         return FeedScreen.State(response = response) {
             when (it) {
                 is FeedScreen.State.Event.ItemClicked -> {

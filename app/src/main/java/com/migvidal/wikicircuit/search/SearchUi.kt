@@ -36,6 +36,7 @@ import com.slack.circuit.sharedelements.SharedElementTransitionScope
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import kotlin.time.Duration.Companion.milliseconds
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -60,7 +61,7 @@ fun SearchUi(state: SearchScreen.State, modifier: Modifier = Modifier) {
                     queryState.edit { replace(0, length, query) }
                     searchJob?.cancel()
                     searchJob = scope.launch {
-                        delay(500)
+                        delay(500.milliseconds)
                         if (query.isNotBlank()) state.eventSink(Search(query))
                     }
                 },
@@ -75,11 +76,8 @@ fun SearchUi(state: SearchScreen.State, modifier: Modifier = Modifier) {
     ) {
         val response = state.response
         when (val status = response.status) {
-            is RequestStatus.Failure -> Text(status.message)
-            RequestStatus.Loading -> {
-                SkeletonResults()
-            }
-
+            is RequestStatus.Failure -> Text(text = status.message)
+            RequestStatus.Loading -> SkeletonResults()
             RequestStatus.Success -> {
                 val data = response.data ?: return@SearchBar
                 val pages = data.query?.pages ?: return@SearchBar
@@ -94,8 +92,8 @@ fun SearchUi(state: SearchScreen.State, modifier: Modifier = Modifier) {
 
 @Composable
 private fun Results(
-    results: List<SearchResponse.ResultPage>,
-    onResultClicked: (SearchResponse.ResultPage) -> Unit,
+    results: List<SearchModel.ResultPage>,
+    onResultClicked: (SearchModel.ResultPage) -> Unit,
     modifier: Modifier = Modifier,
 ) {
     LazyColumn(modifier = modifier) {
@@ -117,8 +115,8 @@ fun SkeletonResults(modifier: Modifier = Modifier) {
 @OptIn(ExperimentalSharedTransitionApi::class)
 @Composable
 private fun ResultItem(
-    result: SearchResponse.ResultPage?,
-    onClick: (SearchResponse.ResultPage?) -> Unit,
+    result: SearchModel.ResultPage?,
+    onClick: (SearchModel.ResultPage?) -> Unit,
     modifier: Modifier = Modifier,
 ) {
     val showSkeleton = result == null
