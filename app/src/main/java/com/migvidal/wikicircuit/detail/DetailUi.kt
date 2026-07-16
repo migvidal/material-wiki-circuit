@@ -13,9 +13,9 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.migvidal.wikicircuit.core.ui.RequestStatus
 import com.migvidal.wikicircuit.core.ui.SharedElementKey
-import com.migvidal.wikicircuit.core.ui.customSharedBounds
-import com.migvidal.wikicircuit.core.ui.customSharedElement
-import com.migvidal.wikicircuit.core.ui.shimmer
+import com.migvidal.wikicircuit.core.ui.components.customSharedBounds
+import com.migvidal.wikicircuit.core.ui.components.customSharedElement
+import com.migvidal.wikicircuit.core.ui.components.shimmer
 import com.slack.circuit.sharedelements.SharedElementTransitionScope
 
 @OptIn(ExperimentalSharedTransitionApi::class)

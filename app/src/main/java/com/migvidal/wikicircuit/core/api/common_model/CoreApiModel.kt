@@ -14,6 +14,7 @@ import kotlinx.serialization.encoding.encodeStructure
 
 interface Page {
     val title: String
+    val pageid: Int?
 }
 
 @Serializable(with = QuerySerializer::class)

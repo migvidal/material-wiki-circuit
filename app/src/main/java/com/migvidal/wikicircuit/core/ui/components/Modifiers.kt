@@ -1,4 +1,4 @@
-package com.migvidal.wikicircuit.core.ui
+package com.migvidal.wikicircuit.core.ui.components
 
 import androidx.compose.animation.core.LinearEasing
 import androidx.compose.animation.core.RepeatMode

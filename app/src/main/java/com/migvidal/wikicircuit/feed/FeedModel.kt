@@ -9,23 +9,18 @@ import kotlinx.serialization.Serializable
 data class FeedModel(
     @SerialName("tfa") val featuredArticle: FeaturedArticle,
     val image: ImageOfTheDay,
+    val mostread: MostRead,
 ) {
     @Serializable
     data class FeaturedArticle(
         override val title: String,
-        val pageid: Int? = null,
-        val titles: Titles,
-        @SerialName("originalimage") val originalImage: ApiImage? = null,
-        val description: String? = null,
-        val extract: String,
-        @SerialName("extract_html") val extractHtml: String,
-    ): Page {
-        @Serializable
-        data class Titles(
-            val canonical: String,
-            val normalized: String,
-        )
-    }
+        override val pageid: Int? = null,
+        override val titles: Titles,
+        override val originalimage: ApiImage? = null,
+        override val description: String? = null,
+        override val extract: String,
+        @SerialName("extract_html") override val extractHtml: String,
+    ) : Page, Article
 
     @Serializable
     data class ImageOfTheDay(
@@ -39,4 +34,36 @@ data class FeedModel(
         @Serializable
         data class TextWrapper(val html: String, val text: String)
     }
+
+    @Serializable
+    data class MostRead(val date: String, val articles: List<MostReadArticle>) {
+        @Serializable
+        data class MostReadArticle(
+            override val title: String,
+            override val pageid: Int?= null,
+            override val titles: Titles,
+            override val originalimage: ApiImage? = null,
+            override val description: String? = null,
+            override val extract: String,
+            @SerialName("extract_html") override val extractHtml: String,
+            val views: Int,
+            val rank: Int,
+        ) : Page, Article
+    }
 }
+
+@Serializable
+sealed interface Article {
+    val titles: Titles
+    val originalimage: ApiImage?
+    val description: String?
+    val extract: String
+    val extractHtml: String
+}
+
+@Serializable
+data class Titles(
+    val canonical: String,
+    val normalized: String,
+)
+

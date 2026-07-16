@@ -19,8 +19,8 @@ data class ArticleModel(
     @Serializable
     data class PageWithImages(
         override val title: String,
+        override val pageid: Int? = null,
         val ns: Int,
-        val pageid: Int? = null,
         @SerialName("images") val images: List<ArticleImage>? = null,
         val pageprops: PageProps,
     ) : Page {

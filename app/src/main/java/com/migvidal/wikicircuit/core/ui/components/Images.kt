@@ -1,4 +1,4 @@
-package com.migvidal.wikicircuit.core.ui
+package com.migvidal.wikicircuit.core.ui.components
 
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.animateContentSize
@@ -19,6 +19,7 @@ import coil3.network.httpHeaders
 import coil3.request.ImageRequest
 import com.migvidal.wikicircuit.core.USER_AGENT_KEY
 import com.migvidal.wikicircuit.core.getUserAgent
+import com.migvidal.wikicircuit.core.ui.RequestStatus
 
 @Composable
 fun CustomAsyncImage(width: Int, height: Int, sourceUrl: String, modifier: Modifier = Modifier) {

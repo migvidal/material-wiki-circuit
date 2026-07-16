@@ -15,7 +15,7 @@ data class SearchModel(
     @Serializable
     data class ResultPage(
         override val title: String,
-        val pageid: Int? = null,
+        override val pageid: Int? = null,
         val ns: Int,
         val index: Int,
         val thumbnail: Thumbnail? = null,
