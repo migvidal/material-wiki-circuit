@@ -1,14 +1,17 @@
 package com.migvidal.wikicircuit.feed
 
+import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.material3.Card
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import com.migvidal.wikicircuit.core.ui.CustomAsyncImage
 import com.migvidal.wikicircuit.core.ui.RequestStatus
 import com.migvidal.wikicircuit.core.ui.shimmer
 
@@ -25,29 +28,43 @@ fun FeedUi(state: FeedScreen.State, modifier: Modifier = Modifier) {
 }
 
 @Composable
-fun FeedBody(response: CachedFeedResponse, modifier: Modifier = Modifier) {
+private fun FeedBody(response: CachedFeedResponse, modifier: Modifier = Modifier) {
+    val status = response.status
+    val isLoading = status is RequestStatus.Loading
+    val feed = response.data
     LazyColumn(modifier = modifier) {
         item {
-            ImageOfTheDay()
+            val img = feed?.image
+            AnimatedVisibility(visible = img != null) {
+                ImageOfTheDay(imageModel = img ?: return@AnimatedVisibility)
+            }
         }
         item {
-            Featured(featuredArticle = response.data?.featuredArticle)
+            val featured = feed?.featuredArticle
+            val noData = status is RequestStatus.Failure && featured == null
+            AnimatedVisibility(visible = !noData) {
+                Featured(featuredArticle = featured, isLoading = isLoading)
+            }
         }
     }
 }
 
 @Composable
-private fun ImageOfTheDay(modifier: Modifier = Modifier) {
+private fun ImageOfTheDay(imageModel: FeedModel.ImageOfTheDay, modifier: Modifier = Modifier) {
+    val img = imageModel.image
+    CustomAsyncImage(width = img.width, height = img.height, sourceUrl = img.source)
 }
 
 @Composable
-private fun Featured(featuredArticle: FeedModel.FeaturedArticle?, modifier: Modifier = Modifier) {
-    val showSkeleton = featuredArticle == null
-
-    Column(modifier = modifier) {
+private fun Featured(
+    featuredArticle: FeedModel.FeaturedArticle?,
+    isLoading: Boolean,
+    modifier: Modifier = Modifier,
+) {
+    Card(modifier = modifier) {
         Text(
             modifier = Modifier.then(
-                if (showSkeleton) {
+                if (isLoading) {
                     Modifier
                         .fillMaxWidth()
                         .padding(vertical = 8.dp)
@@ -56,11 +73,11 @@ private fun Featured(featuredArticle: FeedModel.FeaturedArticle?, modifier: Modi
                     Modifier
                 }
             ),
-            text = featuredArticle?.titles?.normalized ?: "",
+            text = if (isLoading) "" else featuredArticle?.titles?.normalized ?: "",
             style = MaterialTheme.typography.titleLarge,
         )
 
-        if (showSkeleton) {
+        if (isLoading) {
             Text(
                 modifier = Modifier
                     .fillMaxWidth()
@@ -68,9 +85,14 @@ private fun Featured(featuredArticle: FeedModel.FeaturedArticle?, modifier: Modi
                     .padding(vertical = 8.dp),
                 text = "",
             )
+        } else {
+            Text(text = featuredArticle?.description ?: "")
         }
 
-        Text(text = featuredArticle?.description ?: "")
+        featuredArticle?.let {
+            val img = it.originalImage ?: return@let
+            CustomAsyncImage(width = img.width, height = img.height, sourceUrl = img.source)
+        }
     }
 }
 

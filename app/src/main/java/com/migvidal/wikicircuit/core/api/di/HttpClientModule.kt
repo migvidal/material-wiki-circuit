@@ -4,7 +4,9 @@ import android.content.Context
 import android.os.Build
 import com.migvidal.wikicircuit.BuildConfig
 import com.migvidal.wikicircuit.R
+import com.migvidal.wikicircuit.core.USER_AGENT_KEY
 import com.migvidal.wikicircuit.core.di.ContextModule
+import com.migvidal.wikicircuit.core.getUserAgent
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -42,9 +44,7 @@ class HttpClientModule {
                     parameters.append(name = "formatversion", value = "2")
                 }
                 headers {
-                    val appName = context.getString(R.string.app_name)
-                    val userAgent = "$appName/${BuildConfig.VERSION_NAME} (Android ${Build.VERSION.RELEASE}; ${Build.MODEL} Build/${Build.ID})"
-                    append("User-Agent", userAgent)
+                    append(USER_AGENT_KEY, getUserAgent(context))
                 }
             }
         }

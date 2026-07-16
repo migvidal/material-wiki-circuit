@@ -66,5 +66,5 @@ class QuerySerializer<T : Page>(pageSerializer: KSerializer<T>) :
 
 @Serializable
 data class ApiImage(
-    val source: String, val height: Int? = null, val width: Int? = null
+    val source: String, val height: Int, val width: Int,
 )
