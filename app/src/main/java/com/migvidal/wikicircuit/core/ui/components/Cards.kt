@@ -55,7 +55,7 @@ fun CardWithImage(
     modifier: Modifier = Modifier,
     content: @Composable ColumnScope.() -> Unit,
 ) {
-    ElevatedCard(modifier = modifier, onClick = onClick) {
+    CustomElevatedCard(modifier = modifier, onClick = onClick) {
         image()
         Column(modifier = Modifier.padding(8.dp)) {
             content()

@@ -2,7 +2,9 @@ package com.migvidal.wikicircuit.core.ui.components
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.RowScope
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -22,10 +24,11 @@ import kotlinx.coroutines.launch
 @Composable
 fun <T> CustomCarouselLayoutCard(
     isLoading: Boolean,
-    header: @Composable () -> Unit,
+    header: @Composable RowScope.() -> Unit,
     carouselItems: List<T>,
-    carouselItem: @Composable (CarouselItemScope.(itemOrNull: T?) -> Unit),
+    carouselItem: @Composable (itemOrNull: T?) -> Unit,
     modifier: Modifier = Modifier,
+    leadIn: @Composable ColumnScope.() -> Unit = {},
 ) {
     CustomCard(modifier = modifier) {
         Column {
@@ -36,7 +39,7 @@ fun <T> CustomCarouselLayoutCard(
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(horizontal = 16.dp),
+                    .padding(horizontal = 16.dp, vertical = 8.dp),
                 horizontalArrangement = Arrangement.SpaceBetween,
                 verticalAlignment = Alignment.CenterVertically,
             ) {
@@ -52,13 +55,26 @@ fun <T> CustomCarouselLayoutCard(
                 }
             }
 
-            HorizontalCenteredHeroCarousel(
-                modifier = Modifier.fillMaxWidth(),
-                state = carouselState,
-            ) { index ->
-                val item = carouselItems.getOrElse(index) { null }
-                carouselItem(item)
+            Column(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 16.dp, vertical = 8.dp)
+            ) {
+                leadIn()
             }
+
+            if (carouselItems.size > 1) {
+                HorizontalCenteredHeroCarousel(
+                    modifier = Modifier.fillMaxWidth(),
+                    state = carouselState,
+                ) { index ->
+                    val item = carouselItems.getOrElse(index) { null }
+                    carouselItem(item)
+                }
+            } else {
+                carouselItem(carouselItems.firstOrNull())
+            }
+
         }
     }
 }

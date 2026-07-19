@@ -1,8 +1,11 @@
 package com.migvidal.wikicircuit.feed
 
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
@@ -13,6 +16,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.dropShadow
 import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
@@ -51,17 +55,70 @@ private fun FeedBody(
     val isLoading = status is RequestStatus.Loading
     val feed = response.data
     LazyColumn(modifier = modifier) {
+        val stickyModifiers = Modifier
+            .padding(horizontal = 16.dp)
+            .dropShadow(shape = RectangleShape) {
+                alpha = .4f
+                radius = 32f
+            }
+
+        val cardPadding = Modifier.padding(vertical = 8.dp)
+
+        stickyHeader {
+            Text(
+                modifier = Modifier.then(stickyModifiers),
+                text = "Today",
+                style = MaterialTheme.typography.displaySmall,
+            )
+        }
         item {
             val img = feed?.image
-            ImageOfTheDay(imageModel = img, isLoading = isLoading, onItemClicked = onItemClicked)
+            ImageOfTheDay(
+                modifier = Modifier.then(cardPadding),
+                imageModel = img,
+                isLoading = isLoading,
+                onItemClicked = onItemClicked
+            )
         }
         item {
             val featured = feed?.featuredArticle
-            Featured(featuredArticle = featured, isLoading = isLoading)
+            Featured(
+                modifier = Modifier
+                    .then(cardPadding)
+                    .padding(horizontal = 16.dp), featuredArticle = featured, isLoading = isLoading
+            )
         }
         item {
             val mostRead = feed?.mostread
-            MostRead(mostRead = mostRead, isLoading = isLoading, onItemClicked = onItemClicked)
+            MostRead(
+                modifier = Modifier.then(cardPadding),
+                mostRead = mostRead,
+                isLoading = isLoading,
+                onItemClicked = onItemClicked
+            )
+        }
+        stickyHeader {
+            Text(
+                modifier = Modifier.then(stickyModifiers),
+                text = "On this day",
+                style = MaterialTheme.typography.displaySmall,
+            )
+        }
+        val onThisDay = feed?.onThisDay
+        items(count = onThisDay?.size ?: 3) {
+            val item = onThisDay?.get(it)
+            OnThisDayItem(
+                modifier = Modifier.then(cardPadding),
+                onThisDay = item,
+                isLoading = isLoading,
+            )
+        }
+
+        item {
+            Box(
+                modifier = Modifier.fillMaxWidth().height(80.dp),
+                contentAlignment = Alignment.Center,
+            ) { Text(text = "You've reached the end!") }
         }
     }
 }
@@ -110,7 +167,7 @@ private fun Featured(
     modifier: Modifier = Modifier,
 ) {
     CardWithImage(
-        modifier = modifier.padding(horizontal = 8.dp, vertical = 16.dp),
+        modifier = modifier,
         image = {
             CustomAsyncImage(
                 imageOrNull = featuredArticle?.originalimage,
@@ -135,7 +192,7 @@ private fun Featured(
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun MostRead(
+private fun MostRead(
     mostRead: FeedModel.MostRead?,
     isLoading: Boolean,
     onItemClicked: (title: String) -> Unit,
@@ -199,5 +256,50 @@ fun MostRead(
 
         }
     )
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+private fun OnThisDayItem(
+    onThisDay: FeedModel.OnThisDay?,
+    isLoading: Boolean,
+    modifier: Modifier = Modifier,
+) {
+    CustomCarouselLayoutCard(
+        modifier = modifier,
+        isLoading = isLoading,
+        header = {
+            Column {
+                CustomText(
+                    textOrNull = onThisDay?.year?.toString(),
+                    isLoading = isLoading,
+                    fontWeight = FontWeight.Bold,
+                )
+            }
+        },
+        leadIn = {
+            CustomText(textOrNull = onThisDay?.text, isLoading = isLoading)
+        },
+        carouselItems = onThisDay?.pages ?: emptyList(),
+        carouselItem = { page ->
+            CardWithImage(
+                modifier = Modifier.padding(horizontal = 8.dp),
+                onClick = {},
+                image = {
+                    CustomAsyncImage(
+                        imageOrNull = page?.originalimage,
+                        isDataLoading = isLoading,
+                    )
+                }
+            ) {
+                CustomText(
+                    textOrNull = page?.titles?.normalized,
+                    isLoading = isLoading,
+                    style = MaterialTheme.typography.titleLarge,
+                )
+            }
+        }
+    )
+
 }
 
