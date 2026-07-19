@@ -7,30 +7,37 @@ import com.migvidal.wikicircuit.detail.ArticleModel
 import com.migvidal.wikicircuit.feed.FeedModel
 import com.migvidal.wikicircuit.search.SearchModel
 import dagger.hilt.android.qualifiers.ApplicationContext
+import kotlinx.coroutines.delay
 import kotlinx.serialization.ExperimentalSerializationApi
 import kotlinx.serialization.json.Json
 import kotlinx.serialization.json.decodeFromStream
 import java.time.Instant
 import java.time.LocalDate
 import javax.inject.Inject
+import kotlin.time.Duration.Companion.seconds
+
+private val FAKE_DELAY = 2.seconds
 
 @OptIn(ExperimentalSerializationApi::class)
-class FakeOfflineApi @Inject constructor(@param:ApplicationContext private val context: Context) :
+class FakeOfflineApi @Inject constructor(@param:ApplicationContext private val context: Context, private val json: Json) :
     ApiService {
     private val resources: Resources = context.resources
 
     override suspend fun getArticle(title: String): ArticleModel {
         val inputStream = resources.openRawResource(R.raw.article)
-        return Json.decodeFromStream<ArticleModel>(inputStream)
+        delay(FAKE_DELAY)
+        return json.decodeFromStream<ArticleModel>(inputStream)
     }
 
     override suspend fun getSearch(term: String): SearchModel {
         val inputStream = resources.openRawResource(R.raw.search)
-        return Json.decodeFromStream<SearchModel>(inputStream)
+        delay(FAKE_DELAY)
+        return json.decodeFromStream<SearchModel>(inputStream)
     }
 
     override suspend fun getFeed(forDate: LocalDate): FeedModel {
         val inputStream = resources.openRawResource(R.raw.feed)
-        return Json.decodeFromStream<FeedModel>(inputStream)
+        delay(FAKE_DELAY)
+        return json.decodeFromStream<FeedModel>(inputStream)
     }
 }

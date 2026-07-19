@@ -9,7 +9,7 @@ import kotlinx.serialization.Serializable
 data class FeedModel(
     @SerialName("tfa") val featuredArticle: FeaturedArticle,
     val image: ImageOfTheDay,
-    val mostread: MostRead,
+    val mostread: MostRead? = null,
 ) {
     @Serializable
     data class FeaturedArticle(
@@ -40,7 +40,7 @@ data class FeedModel(
         @Serializable
         data class MostReadArticle(
             override val title: String,
-            override val pageid: Int?= null,
+            override val pageid: Int? = null,
             override val titles: Titles,
             override val originalimage: ApiImage? = null,
             override val description: String? = null,

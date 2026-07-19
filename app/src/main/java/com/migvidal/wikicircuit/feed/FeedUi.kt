@@ -1,23 +1,30 @@
 package com.migvidal.wikicircuit.feed
 
-import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.material3.Card
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
-import androidx.compose.material3.carousel.HorizontalCenteredHeroCarousel
-import androidx.compose.material3.carousel.rememberCarouselState
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.RectangleShape
+import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import com.migvidal.wikicircuit.R
 import com.migvidal.wikicircuit.core.ui.RequestStatus
+import com.migvidal.wikicircuit.core.ui.components.CardWithImage
 import com.migvidal.wikicircuit.core.ui.components.CustomAsyncImage
-import com.migvidal.wikicircuit.core.ui.components.TextWithSkeleton
-import com.migvidal.wikicircuit.core.ui.components.shimmer
+import com.migvidal.wikicircuit.core.ui.components.CustomCarouselLayoutCard
+import com.migvidal.wikicircuit.core.ui.components.CustomElevatedCard
+import com.migvidal.wikicircuit.core.ui.components.CustomPreHeading
+import com.migvidal.wikicircuit.core.ui.components.CustomText
 
 @Composable
 fun FeedUi(state: FeedScreen.State, modifier: Modifier = Modifier) {
@@ -25,45 +32,75 @@ fun FeedUi(state: FeedScreen.State, modifier: Modifier = Modifier) {
         val response = state.response
         when (val status = response.status) {
             is RequestStatus.Failure -> Text(text = status.message)
-            RequestStatus.Loading -> FeedBody(response = response)
-            RequestStatus.Success -> FeedBody(response = response)
+            RequestStatus.Loading -> FeedBody(response = response, onItemClicked = {})
+            RequestStatus.Success -> FeedBody(
+                response = response,
+                onItemClicked = { state.eventSink(FeedScreen.State.Event.ItemClicked(it)) },
+            )
         }
     }
 }
 
 @Composable
-private fun FeedBody(response: CachedFeedResponse, modifier: Modifier = Modifier) {
+private fun FeedBody(
+    response: CachedFeedResponse,
+    onItemClicked: (title: String) -> Unit,
+    modifier: Modifier = Modifier
+) {
     val status = response.status
     val isLoading = status is RequestStatus.Loading
     val feed = response.data
     LazyColumn(modifier = modifier) {
         item {
             val img = feed?.image
-            AnimatedVisibility(visible = img != null) {
-                ImageOfTheDay(imageModel = img ?: return@AnimatedVisibility)
-            }
+            ImageOfTheDay(imageModel = img, isLoading = isLoading, onItemClicked = onItemClicked)
         }
         item {
             val featured = feed?.featuredArticle
-            val noData = status is RequestStatus.Failure && featured == null
-            AnimatedVisibility(visible = !noData) {
-                Featured(featuredArticle = featured, isLoading = isLoading)
-            }
+            Featured(featuredArticle = featured, isLoading = isLoading)
         }
         item {
             val mostRead = feed?.mostread
-            val noData = status is RequestStatus.Failure && mostRead == null
-            AnimatedVisibility(visible = !noData) {
-                MostRead(mostRead = mostRead, isLoading = isLoading)
-            }
+            MostRead(mostRead = mostRead, isLoading = isLoading, onItemClicked = onItemClicked)
         }
     }
 }
 
 @Composable
-private fun ImageOfTheDay(imageModel: FeedModel.ImageOfTheDay, modifier: Modifier = Modifier) {
-    val img = imageModel.image
-    CustomAsyncImage(width = img.width, height = img.height, sourceUrl = img.source)
+private fun ImageOfTheDay(
+    imageModel: FeedModel.ImageOfTheDay?,
+    isLoading: Boolean,
+    onItemClicked: (title: String) -> Unit,
+    modifier: Modifier = Modifier,
+) {
+    CustomElevatedCard(
+        modifier = modifier,
+        shape = RectangleShape,
+        onClick = {
+            val title = imageModel?.title ?: return@CustomElevatedCard
+            onItemClicked(title)
+        },
+    ) {
+        CustomAsyncImage(
+            imageOrNull = imageModel?.image,
+            isDataLoading = isLoading,
+            cropped = false
+        )
+        Column(modifier = Modifier.padding(start = 16.dp, end = 16.dp, bottom = 8.dp)) {
+            CustomPreHeading(textOrNull = "Image of the day", isLoading = isLoading)
+            CustomText(
+                textOrNull = imageModel?.description?.text,
+                isLoading = isLoading,
+                style = MaterialTheme.typography.titleLarge,
+            )
+            val attribution = buildString {
+                append(imageModel?.artist?.text)
+                append(" · ")
+                append(imageModel?.credit?.text)
+            }
+            CustomText(textOrNull = attribution, isLoading = isLoading)
+        }
+    }
 }
 
 @Composable
@@ -72,57 +109,95 @@ private fun Featured(
     isLoading: Boolean,
     modifier: Modifier = Modifier,
 ) {
-    Card(modifier = modifier) {
-        featuredArticle?.let {
-            val img = it.originalimage ?: return@let
-            CustomAsyncImage(width = img.width, height = img.height, sourceUrl = img.source)
-        }
-
-        TextWithSkeleton(
+    CardWithImage(
+        modifier = modifier.padding(horizontal = 8.dp, vertical = 16.dp),
+        image = {
+            CustomAsyncImage(
+                imageOrNull = featuredArticle?.originalimage,
+                isDataLoading = isLoading,
+            )
+        },
+        onClick = {},
+    ) {
+        CustomPreHeading(textOrNull = "Featured", isLoading = isLoading)
+        CustomText(
             textOrNull = featuredArticle?.titles?.normalized,
             isLoading = isLoading,
             style = MaterialTheme.typography.titleLarge,
         )
 
-        if (isLoading) {
-            Text(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .shimmer()
-                    .padding(vertical = 8.dp),
-                text = "",
-            )
-        } else {
-            Text(text = featuredArticle?.description ?: "")
-        }
+        CustomText(
+            textOrNull = featuredArticle?.description,
+            isLoading = isLoading,
+        )
     }
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun MostRead(mostRead: FeedModel.MostRead?, isLoading: Boolean, modifier: Modifier = Modifier) {
-    Card(modifier = modifier) {
-        TextWithSkeleton(
-            textOrNull = mostRead?.date,
-            isLoading = isLoading,
-            style = MaterialTheme.typography.titleLarge,
-        )
-        TextWithSkeleton(
-            textOrNull = mostRead?.articles?.size?.toString(),
-            isLoading = isLoading,
-        )
-        val articles = mostRead?.articles ?: return@Card
-        HorizontalCenteredHeroCarousel(
-            modifier = Modifier.fillMaxWidth(),
-            state = rememberCarouselState { articles.size },
-        ) { index ->
-            val article = articles[index]
-            val img = article.originalimage ?: return@HorizontalCenteredHeroCarousel
-            Column {
-                Text(text = article.titles.normalized)
-                CustomAsyncImage(width = img.width, height = img.height, sourceUrl = img.source)
+fun MostRead(
+    mostRead: FeedModel.MostRead?,
+    isLoading: Boolean,
+    onItemClicked: (title: String) -> Unit,
+    modifier: Modifier = Modifier
+) {
+    CustomCarouselLayoutCard(
+        modifier = modifier,
+        isLoading = isLoading,
+        header = {
+            CustomPreHeading(
+                modifier = Modifier.padding(vertical = 8.dp),
+                textOrNull = "Most read · ${mostRead?.date}",
+                isLoading = isLoading,
+            )
+        },
+        carouselItems = mostRead?.articles ?: emptyList(),
+        carouselItem = { item ->
+            val img = item?.originalimage
+            val titles = item?.titles
+            CardWithImage(
+                modifier = Modifier.padding(horizontal = 8.dp),
+                onClick = {
+                    val title = titles?.canonical ?: return@CardWithImage
+                    onItemClicked(title)
+                },
+                image = {
+                    CustomAsyncImage(
+                        imageOrNull = img,
+                        isDataLoading = isLoading,
+                    )
+                }
+            ) {
+                Column(modifier = Modifier.padding(8.dp)) {
+                    Row(verticalAlignment = Alignment.Bottom) {
+                        CustomText(
+                            textOrNull = "#${item?.rank}",
+                            isLoading = isLoading,
+                            fontWeight = FontWeight.Bold,
+                        )
+                        Spacer(modifier = Modifier.size(8.dp))
+                        if (!isLoading) {
+                            Icon(
+                                modifier = Modifier.size(16.dp),
+                                painter = painterResource(R.drawable.bar_chart),
+                                contentDescription = "Views",
+                            )
+                        }
+                        CustomText(
+                            textOrNull = item?.views.toString(),
+                            isLoading = isLoading,
+                            fontWeight = FontWeight.Bold,
+                        )
+                    }
+                    CustomText(
+                        textOrNull = titles?.normalized,
+                        isLoading = isLoading,
+                        style = MaterialTheme.typography.titleLarge,
+                    )
+                }
             }
+
         }
-    }
+    )
 }
 

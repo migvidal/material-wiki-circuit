@@ -24,14 +24,14 @@ import io.ktor.serialization.kotlinx.json.json
 import kotlinx.serialization.json.Json
 import javax.inject.Inject
 
-@Module(includes = [ContextModule::class])
+@Module(includes = [ContextModule::class, JsonModule::class])
 @InstallIn(SingletonComponent::class)
 class HttpClientModule {
     @Provides
-    fun providesHttpClient(context: Context): HttpClient {
+    fun providesHttpClient(context: Context, json: Json): HttpClient {
         return HttpClient(engine = OkHttp.create()) {
             install(ContentNegotiation) {
-                json(json = Json { ignoreUnknownKeys = true })
+                json(json = json)
             }
 
             defaultRequest {
