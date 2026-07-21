@@ -29,6 +29,10 @@ import com.migvidal.wikicircuit.core.ui.components.CustomCarouselLayoutCard
 import com.migvidal.wikicircuit.core.ui.components.CustomElevatedCard
 import com.migvidal.wikicircuit.core.ui.components.CustomPreHeading
 import com.migvidal.wikicircuit.core.ui.components.CustomText
+import com.migvidal.wikicircuit.feed.FeedModel.MostRead.MostReadArticle
+import com.migvidal.wikicircuit.feed.FeedModel.OnThisDay.OnThisDayPage
+import com.migvidal.wikicircuit.feed.FeedScreen.State.Event.ImageClicked
+import com.migvidal.wikicircuit.feed.FeedScreen.State.Event.ItemClicked
 
 @Composable
 fun FeedUi(state: FeedScreen.State, modifier: Modifier = Modifier) {
@@ -36,21 +40,18 @@ fun FeedUi(state: FeedScreen.State, modifier: Modifier = Modifier) {
         val response = state.response
         when (val status = response.status) {
             is RequestStatus.Failure -> Text(text = status.message)
-            RequestStatus.Loading -> FeedBody(response = response, onItemClicked = {})
-            RequestStatus.Success -> FeedBody(
-                response = response,
-                onItemClicked = { state.eventSink(FeedScreen.State.Event.ItemClicked(it)) },
-            )
+            RequestStatus.Loading -> FeedBody(state = state)
+            RequestStatus.Success -> FeedBody(state = state)
         }
     }
 }
 
 @Composable
 private fun FeedBody(
-    response: CachedFeedResponse,
-    onItemClicked: (title: String) -> Unit,
+    state: FeedScreen.State,
     modifier: Modifier = Modifier
 ) {
+    val response = state.response
     val status = response.status
     val isLoading = status is RequestStatus.Loading
     val feed = response.data
@@ -77,7 +78,13 @@ private fun FeedBody(
                 modifier = Modifier.then(cardPadding),
                 imageModel = img,
                 isLoading = isLoading,
-                onItemClicked = onItemClicked
+                onClick = { image ->
+                    image.filePage?.let {
+                        state.eventSink(
+                            ImageClicked(it)
+                        )
+                    }
+                }
             )
         }
         item {
@@ -94,7 +101,14 @@ private fun FeedBody(
                 modifier = Modifier.then(cardPadding),
                 mostRead = mostRead,
                 isLoading = isLoading,
-                onItemClicked = onItemClicked
+                onItemClicked = { item ->
+                    state.eventSink(
+                        ItemClicked(
+                            titles = item.titles,
+                            mainImage = item.originalimage,
+                        )
+                    )
+                }
             )
         }
         stickyHeader {
@@ -111,12 +125,22 @@ private fun FeedBody(
                 modifier = Modifier.then(cardPadding),
                 onThisDay = item,
                 isLoading = isLoading,
+                onitemClicked = { item ->
+                    state.eventSink(
+                        ItemClicked(
+                            titles = item.titles,
+                            mainImage = item.originalimage,
+                        )
+                    )
+                },
             )
         }
 
         item {
             Box(
-                modifier = Modifier.fillMaxWidth().height(80.dp),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(80.dp),
                 contentAlignment = Alignment.Center,
             ) { Text(text = "You've reached the end!") }
         }
@@ -127,15 +151,14 @@ private fun FeedBody(
 private fun ImageOfTheDay(
     imageModel: FeedModel.ImageOfTheDay?,
     isLoading: Boolean,
-    onItemClicked: (title: String) -> Unit,
+    onClick: (imageModel: FeedModel.ImageOfTheDay) -> Unit,
     modifier: Modifier = Modifier,
 ) {
     CustomElevatedCard(
         modifier = modifier,
         shape = RectangleShape,
         onClick = {
-            val title = imageModel?.title ?: return@CustomElevatedCard
-            onItemClicked(title)
+            imageModel?.let { onClick(it) }
         },
     ) {
         CustomAsyncImage(
@@ -195,7 +218,7 @@ private fun Featured(
 private fun MostRead(
     mostRead: FeedModel.MostRead?,
     isLoading: Boolean,
-    onItemClicked: (title: String) -> Unit,
+    onItemClicked: (MostReadArticle) -> Unit,
     modifier: Modifier = Modifier
 ) {
     CustomCarouselLayoutCard(
@@ -215,8 +238,7 @@ private fun MostRead(
             CardWithImage(
                 modifier = Modifier.padding(horizontal = 8.dp),
                 onClick = {
-                    val title = titles?.canonical ?: return@CardWithImage
-                    onItemClicked(title)
+                    item?.let { onItemClicked(it) }
                 },
                 image = {
                     CustomAsyncImage(
@@ -263,6 +285,7 @@ private fun MostRead(
 private fun OnThisDayItem(
     onThisDay: FeedModel.OnThisDay?,
     isLoading: Boolean,
+    onitemClicked: (OnThisDayPage) -> Unit,
     modifier: Modifier = Modifier,
 ) {
     CustomCarouselLayoutCard(
@@ -284,7 +307,7 @@ private fun OnThisDayItem(
         carouselItem = { page ->
             CardWithImage(
                 modifier = Modifier.padding(horizontal = 8.dp),
-                onClick = {},
+                onClick = { page?.let { onitemClicked(it) } },
                 image = {
                     CustomAsyncImage(
                         imageOrNull = page?.originalimage,

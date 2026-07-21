@@ -3,7 +3,7 @@ package com.migvidal.wikicircuit.search
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.migvidal.wikicircuit.detail.DetailScreen
+import com.migvidal.wikicircuit.article.ArticleScreen
 import com.slack.circuit.codegen.annotations.CircuitInject
 import com.slack.circuit.runtime.Navigator
 import com.slack.circuit.runtime.presenter.Presenter
@@ -27,8 +27,8 @@ class SearchPresenter @AssistedInject constructor(
 
         return SearchScreen.State(response = response) {
             when (it) {
-                is SearchScreen.State.Event.ArticleClicked -> {
-                    navigator.goTo(DetailScreen(it.title))
+                is SearchScreen.State.Event.ResultClicked -> {
+                    navigator.goTo(ArticleScreen(pageId = it.pageId, mainImage = it.mainImage))
                 }
 
                 is SearchScreen.State.Event.Search -> {

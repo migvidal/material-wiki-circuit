@@ -1,8 +1,8 @@
 package com.migvidal.wikicircuit.core.di
 
-import com.migvidal.wikicircuit.detail.DetailUi
-import com.migvidal.wikicircuit.detail.DetailPresenterFactory
-import com.migvidal.wikicircuit.detail.DetailScreen
+import com.migvidal.wikicircuit.article.ArticlePresenterFactory
+import com.migvidal.wikicircuit.article.ArticleUi
+import com.migvidal.wikicircuit.article.ArticleScreen
 import com.migvidal.wikicircuit.feed.FeedPresenterFactory
 import com.migvidal.wikicircuit.feed.FeedScreen
 import com.migvidal.wikicircuit.feed.FeedUi
@@ -23,14 +23,14 @@ object CircuitModule {
     fun provideCircuit(
         feedPresenterFactory: FeedPresenterFactory,
         searchPresenterFactory: SearchPresenterFactory,
-        detailPresenterFactory: DetailPresenterFactory,
+        articlePresenterFactory: ArticlePresenterFactory,
     ) =
         Circuit.Builder()
             .addPresenterFactory(feedPresenterFactory)
             .addUi<FeedScreen, FeedScreen.State> { state, modifier -> FeedUi(state, modifier) }
             .addPresenterFactory(searchPresenterFactory)
             .addUi<SearchScreen, SearchScreen.State> { state, modifier -> SearchUi(state, modifier) }
-            .addPresenterFactory(detailPresenterFactory)
-            .addUi<DetailScreen, DetailScreen.State> { state, modifier -> DetailUi(state, modifier) }
+            .addPresenterFactory(articlePresenterFactory)
+            .addUi<ArticleScreen, ArticleScreen.State> { state, modifier -> ArticleUi(state, modifier) }
             .build()
 }

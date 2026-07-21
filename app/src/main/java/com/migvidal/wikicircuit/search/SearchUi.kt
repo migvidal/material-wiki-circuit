@@ -30,7 +30,7 @@ import com.migvidal.wikicircuit.core.ui.SharedElementKey
 import com.migvidal.wikicircuit.core.ui.components.customSharedBounds
 import com.migvidal.wikicircuit.core.ui.components.customSharedElement
 import com.migvidal.wikicircuit.core.ui.components.shimmer
-import com.migvidal.wikicircuit.search.SearchScreen.State.Event.ArticleClicked
+import com.migvidal.wikicircuit.search.SearchScreen.State.Event.ResultClicked
 import com.migvidal.wikicircuit.search.SearchScreen.State.Event.Search
 import com.slack.circuit.sharedelements.SharedElementTransitionScope
 import kotlinx.coroutines.Job
@@ -83,7 +83,11 @@ fun SearchUi(state: SearchScreen.State, modifier: Modifier = Modifier) {
                 val pages = data.query?.pages ?: return@SearchBar
                 Results(
                     results = pages,
-                    onResultClicked = { state.eventSink(ArticleClicked(it.title)) }
+                    onResultClicked = { result ->
+                        result.pageid?.let {
+                            state.eventSink(ResultClicked(pageId = it, mainImage = null))
+                        }
+                    }
                 )
             }
         }

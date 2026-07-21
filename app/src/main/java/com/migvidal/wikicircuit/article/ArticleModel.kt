@@ -1,4 +1,4 @@
-package com.migvidal.wikicircuit.detail
+package com.migvidal.wikicircuit.article
 
 import com.migvidal.wikicircuit.core.api.common_model.Page
 import com.migvidal.wikicircuit.core.api.common_model.Query
@@ -23,6 +23,7 @@ data class ArticleModel(
         val ns: Int,
         @SerialName("images") val images: List<ArticleImage>? = null,
         val pageprops: PageProps,
+        @SerialName("canonicalurl") val canonicalUrl: String,
     ) : Page {
 
         @Serializable

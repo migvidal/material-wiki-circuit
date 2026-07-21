@@ -26,7 +26,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import com.migvidal.wikicircuit.R
 import com.migvidal.wikicircuit.core.ui.theme.WikiCircuitTheme
-import com.migvidal.wikicircuit.detail.DetailScreen
+import com.migvidal.wikicircuit.article.ArticleScreen
 import com.migvidal.wikicircuit.feed.FeedScreen
 import com.migvidal.wikicircuit.search.SearchScreen
 import com.slack.circuit.backstack.rememberSaveableBackStack
@@ -81,7 +81,7 @@ class MainActivity : ComponentActivity() {
                         )
                     },
                     bottomBar = {
-                        val bottomBarVisible = currentScreen !is DetailScreen
+                        val bottomBarVisible = currentScreen !is ArticleScreen
                         AnimatedVisibility(visible = bottomBarVisible) {
                             BottomBar(
                                 currentScreen = currentScreen,
@@ -118,8 +118,8 @@ fun TopBar(
             Text(
                 text = when (currentScreen) {
                     SearchScreen -> stringResource(R.string.search)
-                    DetailScreen -> stringResource(R.string.detail)
                     FeedScreen -> stringResource(R.string.feed)
+                    is ArticleScreen -> stringResource(R.string.detail)
                     else -> ""
                 }
             )

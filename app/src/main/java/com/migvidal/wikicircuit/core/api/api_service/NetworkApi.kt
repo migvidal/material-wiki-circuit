@@ -1,32 +1,42 @@
 package com.migvidal.wikicircuit.core.api.api_service
 
 import androidx.compose.ui.text.intl.Locale
-import com.migvidal.wikicircuit.detail.ArticleModel
+import com.migvidal.wikicircuit.article.ArticleModel
 import com.migvidal.wikicircuit.feed.FeedModel
 import com.migvidal.wikicircuit.search.SearchModel
 import io.ktor.client.HttpClient
 import io.ktor.client.call.body
 import io.ktor.client.request.get
 import io.ktor.http.appendPathSegments
+import io.ktor.util.StringValuesBuilder
 import kotlinx.serialization.ExperimentalSerializationApi
-import java.time.Instant
 import java.time.LocalDate
-import java.time.temporal.ChronoField
 import javax.inject.Inject
 
 @OptIn(ExperimentalSerializationApi::class)
 class NetworkApi @Inject constructor(private val httpClient: HttpClient) :
     ApiService {
 
-    override suspend fun getArticle(title: String): ArticleModel {
+    override suspend fun getArticleByTitle(title: String): ArticleModel {
         return httpClient.get("") {
             url {
                 parameters.apply {
-                    append(name = "prop", value = "images|info|pageprops")
+                    appendArticleParams()
                     append(name = "titles", value = title)
                 }
             }
-        }.body<ArticleModel>()
+        }.body()
+    }
+
+    override suspend fun getArticleById(pageId: Int): ArticleModel {
+        return httpClient.get("") {
+            url {
+                parameters.apply {
+                    appendArticleParams()
+                    append(name = "pageids", value = pageId.toString())
+                }
+            }
+        }.body()
     }
 
     override suspend fun getSearch(term: String): SearchModel {
@@ -34,8 +44,9 @@ class NetworkApi @Inject constructor(private val httpClient: HttpClient) :
             url {
                 parameters.apply {
                     append(name = "generator", value = "prefixsearch")
-                    append(name = "prop", value = "pageimages|pageterms")
+                    append(name = "prop", value = "pageimages|pageterms|")
                     append(name = "piprop", value = "thumbnail")
+                    append(name = "prop", value = "")
                     append(name = "pithumbsize", value = "50")
                     append(name = "pilimit", value = "10")
                     append(name = "redirects", value = "true")
@@ -58,6 +69,11 @@ class NetworkApi @Inject constructor(private val httpClient: HttpClient) :
             }
         }.body<FeedModel>()
     }
+}
+
+private fun StringValuesBuilder.appendArticleParams() {
+    append(name = "prop", value = "images|info|pageprops")
+    append(name = "inprop", value = "url")
 }
 
 private fun Int.paddedLeading(): String {

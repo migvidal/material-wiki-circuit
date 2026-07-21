@@ -1,5 +1,8 @@
 package com.migvidal.wikicircuit.core.api.common_model
 
+import android.os.Parcel
+import android.os.Parcelable
+import kotlinx.parcelize.Parcelize
 import kotlinx.serialization.KSerializer
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.SerializationException
@@ -66,6 +69,7 @@ class QuerySerializer<T : Page>(pageSerializer: KSerializer<T>) :
 }
 
 @Serializable
+@Parcelize
 data class ApiImage(
     val source: String, val height: Int, val width: Int,
-)
+) : Parcelable

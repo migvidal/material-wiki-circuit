@@ -1,4 +1,4 @@
-package com.migvidal.wikicircuit.detail
+package com.migvidal.wikicircuit.article
 
 import android.util.Log
 import com.migvidal.wikicircuit.core.api.api_service.ApiService
@@ -15,11 +15,19 @@ class ArticleRepository @Inject constructor(val api: ApiService) {
     val response = _response.asStateFlow()
 
     suspend fun fetchArticle(title: String) {
+        fetchArticle { api.getArticleByTitle(title) }
+    }
+
+    suspend fun fetchArticle(pageId: Int) {
+        fetchArticle { api.getArticleById(pageId) }
+    }
+
+    private suspend fun fetchArticle(method: suspend () -> ArticleModel) {
         _response.update {
             it.copy(status = RequestStatus.Loading)
         }
         runCatching {
-            api.getArticle(title)
+            method()
         }.onSuccess { data ->
             _response.update {
                 CachedArticleResponse(data = data)

@@ -3,7 +3,7 @@ package com.migvidal.wikicircuit.feed
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.migvidal.wikicircuit.detail.DetailScreen
+import com.migvidal.wikicircuit.article.ArticleScreen
 import com.slack.circuit.codegen.annotations.CircuitInject
 import com.slack.circuit.runtime.Navigator
 import com.slack.circuit.runtime.presenter.Presenter
@@ -29,8 +29,10 @@ class FeedPresenter @AssistedInject constructor(
         return FeedScreen.State(response = response) {
             when (it) {
                 is FeedScreen.State.Event.ItemClicked -> {
-                    navigator.goTo(DetailScreen(it.title))
+                    navigator.goTo(ArticleScreen(titles = it.titles, mainImage = it.mainImage))
                 }
+
+                is FeedScreen.State.Event.ImageClicked -> {}
             }
         }
     }
