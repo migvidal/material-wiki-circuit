@@ -25,8 +25,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import com.migvidal.wikicircuit.R
-import com.migvidal.wikicircuit.core.ui.theme.WikiCircuitTheme
 import com.migvidal.wikicircuit.article.ArticleScreen
+import com.migvidal.wikicircuit.core.ui.theme.WikiCircuitTheme
 import com.migvidal.wikicircuit.feed.FeedScreen
 import com.migvidal.wikicircuit.search.SearchScreen
 import com.slack.circuit.backstack.rememberSaveableBackStack
@@ -36,6 +36,7 @@ import com.slack.circuit.foundation.NavigableCircuitContent
 import com.slack.circuit.foundation.rememberCircuitNavigator
 import com.slack.circuit.runtime.navigation.canGoBack
 import com.slack.circuit.runtime.navigation.currentScreen
+import com.slack.circuit.runtime.resetRoot
 import com.slack.circuit.runtime.screen.Screen
 import com.slack.circuit.sharedelements.SharedElementTransitionLayout
 import dagger.hilt.android.AndroidEntryPoint
@@ -65,27 +66,48 @@ class MainActivity : ComponentActivity() {
     @Composable
     private fun MainContent(modifier: Modifier = Modifier) {
         CircuitCompositionLocals(circuit) {
-            val topLevelScreens = topLevelDestinations.map { it.screen }
-            val backStack =
-                rememberSaveableBackStack(initialScreens = topLevelScreens)
+            val tabs = listOf(
+                Tab(
+                    destination = TopLevelDestination.Feed,
+                    screen = FeedScreen,
+                    labelRes = R.string.feed,
+                    iconRes = R.drawable.feed,
+                ),
+                Tab(
+                    destination = TopLevelDestination.Search,
+                    screen = SearchScreen,
+                    labelRes = R.string.search,
+                    iconRes = R.drawable.search,
+                )
+            )
+
+            val backStack = rememberSaveableBackStack(root = FeedScreen)
             val navigator = rememberCircuitNavigator(backStack)
+            val currentScreen = backStack.currentScreen
+
             WikiCircuitTheme {
-                val currentScreen = backStack.currentScreen
                 Scaffold(
                     modifier = modifier,
                     topBar = {
                         TopBar(
                             currentScreen = currentScreen,
-                            canGoBack = backStack.canGoBack && backStack.currentScreen !in topLevelScreens,
-                            goBack = { navigator.pop() },
+                            canGoBack = backStack.canGoBack,
+                            onBackClick = { navigator.pop() },
                         )
                     },
                     bottomBar = {
                         val bottomBarVisible = currentScreen !is ArticleScreen
                         AnimatedVisibility(visible = bottomBarVisible) {
                             BottomBar(
-                                currentScreen = currentScreen,
-                                onItemClicked = { navigator.goTo(it.screen) },
+                                tabs = tabs,
+                                currentTab = tabs.find { it.screen == currentScreen },
+                                onClick = { tab ->
+                                    navigator.resetRoot(
+                                        newRoot = tab.screen,
+                                        saveState = true,
+                                        restoreState = true,
+                                    )
+                                },
                             )
                         }
                     }
@@ -109,7 +131,7 @@ class MainActivity : ComponentActivity() {
 fun TopBar(
     currentScreen: Screen?,
     canGoBack: Boolean,
-    goBack: () -> Unit,
+    onBackClick: () -> Unit,
     modifier: Modifier = Modifier
 ) {
     TopAppBar(
@@ -126,7 +148,7 @@ fun TopBar(
         },
         navigationIcon = {
             if (canGoBack) {
-                IconButton(onClick = goBack) {
+                IconButton(onClick = onBackClick) {
                     Icon(
                         painter = painterResource(R.drawable.arrow_back),
                         contentDescription = stringResource(R.string.back),
@@ -139,45 +161,37 @@ fun TopBar(
 
 @Composable
 fun BottomBar(
-    currentScreen: Screen?,
-    onItemClicked: (TopLevelDestination) -> Unit,
+    tabs: List<Tab>,
+    currentTab: Tab?,
+    onClick: (Tab) -> Unit,
     modifier: Modifier = Modifier,
 ) {
     NavigationBar(modifier = modifier) {
-        topLevelDestinations.forEach { destination ->
+        tabs.forEach { tab ->
             NavigationBarItem(
-                selected = destination.screen == currentScreen,
-                onClick = { onItemClicked(destination) },
+                selected = tab == currentTab,
+                onClick = { onClick(tab) },
                 icon = {
                     Icon(
-                        painter = painterResource(destination.iconRes),
-                        contentDescription = stringResource(destination.labelRes),
+                        painter = painterResource(tab.iconRes),
+                        contentDescription = stringResource(tab.labelRes),
                     )
                 },
                 label = {
-                    Text(text = stringResource(destination.labelRes))
+                    Text(text = stringResource(tab.labelRes))
                 }
             )
         }
     }
 }
 
-
-private val topLevelDestinations = listOf(
-    TopLevelDestination(
-        screen = SearchScreen,
-        labelRes = R.string.search,
-        iconRes = R.drawable.search,
-    ),
-    TopLevelDestination(
-        screen = FeedScreen,
-        labelRes = R.string.feed,
-        iconRes = R.drawable.feed,
-    ),
-)
-
-data class TopLevelDestination(
+data class Tab(
+    val destination: TopLevelDestination,
     val screen: Screen,
     @param:StringRes val labelRes: Int,
     @param:DrawableRes val iconRes: Int,
 )
+
+enum class TopLevelDestination {
+    Search, Feed
+}

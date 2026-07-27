@@ -2,6 +2,7 @@ package com.migvidal.wikicircuit.article
 
 import com.migvidal.wikicircuit.core.api.common_model.ApiImage
 import com.migvidal.wikicircuit.feed.Titles
+import com.slack.circuit.runtime.CircuitUiEvent
 import com.slack.circuit.runtime.CircuitUiState
 import com.slack.circuit.runtime.screen.Screen
 import kotlinx.parcelize.Parcelize
@@ -20,7 +21,7 @@ data class ArticleScreen(
         val isFavorite: Boolean,
         val eventSink: (Event) -> Unit,
     ) : CircuitUiState {
-        sealed interface Event {
+        sealed interface Event: CircuitUiEvent {
             data object BackClicked : Event
         }
     }
