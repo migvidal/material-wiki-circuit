@@ -9,7 +9,9 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import java.time.Instant
 import javax.inject.Inject
+import javax.inject.Singleton
 
+@Singleton
 class SearchRepository @Inject constructor(val api: ApiService) {
     private val _response = MutableStateFlow(CachedSearchResponse())
     val response = _response.asStateFlow()

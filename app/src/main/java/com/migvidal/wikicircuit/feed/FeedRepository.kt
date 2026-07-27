@@ -10,14 +10,16 @@ import kotlinx.coroutines.flow.update
 import java.time.Instant
 import java.time.LocalDate
 import javax.inject.Inject
+import javax.inject.Singleton
 
+@Singleton
 class FeedRepository @Inject constructor(val api: ApiService) {
     private val _response = MutableStateFlow(CachedFeedResponse())
     val response = _response.asStateFlow()
 
     suspend fun fetchFeed() {
         _response.update {
-            it.copy(status = RequestStatus.Loading)
+            it.copy(status = if (it.data == null) RequestStatus.Loading else it.status)
         }
         runCatching { api.getFeed(LocalDate.now()) }
             .onSuccess { data ->

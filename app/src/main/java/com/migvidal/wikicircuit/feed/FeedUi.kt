@@ -40,8 +40,7 @@ fun FeedUi(state: FeedScreen.State, modifier: Modifier = Modifier) {
         val response = state.response
         when (val status = response.status) {
             is RequestStatus.Failure -> Text(text = status.message)
-            RequestStatus.Loading -> FeedBody(state = state)
-            RequestStatus.Success -> FeedBody(state = state)
+            else -> FeedBody(state = state)
         }
     }
 }

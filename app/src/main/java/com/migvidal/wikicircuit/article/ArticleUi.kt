@@ -34,8 +34,7 @@ fun ArticleUi(state: ArticleScreen.State, modifier: Modifier = Modifier) {
                 val response = state.response
                 when (val status = response.status) {
                     is RequestStatus.Failure -> Text(text = status.message)
-                    RequestStatus.Loading -> ArticleBody(state = state)
-                    RequestStatus.Success -> ArticleBody(state = state)
+                    else -> ArticleBody(state = state)
                 }
             }
         }

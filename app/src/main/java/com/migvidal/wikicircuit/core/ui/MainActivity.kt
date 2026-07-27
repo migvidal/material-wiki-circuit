@@ -65,27 +65,27 @@ class MainActivity : ComponentActivity() {
     @OptIn(ExperimentalMaterial3Api::class, ExperimentalSharedTransitionApi::class)
     @Composable
     private fun MainContent(modifier: Modifier = Modifier) {
-        CircuitCompositionLocals(circuit) {
-            val tabs = listOf(
-                Tab(
-                    destination = TopLevelDestination.Feed,
-                    screen = FeedScreen,
-                    labelRes = R.string.feed,
-                    iconRes = R.drawable.feed,
-                ),
-                Tab(
-                    destination = TopLevelDestination.Search,
-                    screen = SearchScreen,
-                    labelRes = R.string.search,
-                    iconRes = R.drawable.search,
+        WikiCircuitTheme {
+            CircuitCompositionLocals(circuit) {
+                val tabs = listOf(
+                    Tab(
+                        destination = TopLevelDestination.Feed,
+                        screen = FeedScreen,
+                        labelRes = R.string.feed,
+                        iconRes = R.drawable.feed,
+                    ),
+                    Tab(
+                        destination = TopLevelDestination.Search,
+                        screen = SearchScreen,
+                        labelRes = R.string.search,
+                        iconRes = R.drawable.search,
+                    )
                 )
-            )
 
-            val backStack = rememberSaveableBackStack(root = FeedScreen)
-            val navigator = rememberCircuitNavigator(backStack)
-            val currentScreen = backStack.currentScreen
+                val backStack = rememberSaveableBackStack(root = FeedScreen)
+                val navigator = rememberCircuitNavigator(backStack)
+                val currentScreen = backStack.currentScreen
 
-            WikiCircuitTheme {
                 Scaffold(
                     modifier = modifier,
                     topBar = {
@@ -122,6 +122,7 @@ class MainActivity : ComponentActivity() {
                     }
                 }
             }
+
         }
     }
 }
