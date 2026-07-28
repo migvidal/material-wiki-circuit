@@ -11,6 +11,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.unit.dp
+import com.migvidal.wikicircuit.core.ui.SharedElementKey
+import com.slack.circuit.sharedelements.SharedElementTransitionScope
 
 @Composable
 fun CustomCard(
@@ -49,13 +51,19 @@ fun CustomElevatedCard(
 }
 
 @Composable
-fun CardWithImage(
+fun SharedElementTransitionScope.CardWithImage(
     onClick: () -> Unit,
     image: @Composable ColumnScope.() -> Unit,
     modifier: Modifier = Modifier,
+    id: String?,
     content: @Composable ColumnScope.() -> Unit,
 ) {
-    CustomElevatedCard(modifier = modifier, onClick = onClick) {
+    CustomElevatedCard(
+        modifier = modifier.customSharedBounds(
+            scope = this,
+            key = SharedElementKey(type = SharedElementKey.Type.Card, id = id)
+        ), onClick = onClick
+    ) {
         image()
         Column(modifier = Modifier.padding(8.dp)) {
             content()

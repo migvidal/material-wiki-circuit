@@ -5,6 +5,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Card
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -14,6 +15,7 @@ import com.migvidal.wikicircuit.core.ui.RequestStatus
 import com.migvidal.wikicircuit.core.ui.SharedElementKey
 import com.migvidal.wikicircuit.core.ui.components.CustomAsyncImage
 import com.migvidal.wikicircuit.core.ui.components.CustomText
+import com.migvidal.wikicircuit.core.ui.components.MostReadInfo
 import com.migvidal.wikicircuit.core.ui.components.customSharedBounds
 import com.migvidal.wikicircuit.core.ui.components.customSharedElement
 import com.slack.circuit.sharedelements.SharedElementTransitionScope
@@ -22,12 +24,11 @@ import com.slack.circuit.sharedelements.SharedElementTransitionScope
 @Composable
 fun ArticleUi(state: ArticleScreen.State, modifier: Modifier = Modifier) {
     SharedElementTransitionScope {
-        Card(
+        Surface(
             modifier = modifier
-                .padding(16.dp)
-                .customSharedElement(
+                .customSharedBounds(
                     scope = this@SharedElementTransitionScope,
-                    key = SharedElementKey(type = SharedElementKey.Type.Card),
+                    key = SharedElementKey(type = SharedElementKey.Type.Card, id = state.title),
                 ),
         ) {
             Column(modifier = Modifier.padding(16.dp)) {
@@ -46,11 +47,16 @@ private fun SharedElementTransitionScope.ArticleBody(
     state: ArticleScreen.State,
     modifier: Modifier = Modifier
 ) {
-    val response = state.response
-    val status = response.status
-    val isLoading = status is RequestStatus.Loading
-    val article = response.data
     Column(modifier = modifier) {
+        val response = state.response
+        val status = response.status
+
+        val isLoading = status is RequestStatus.Loading
+        state.mostReadInfo?.let {
+            MostReadInfo(mostRead = it, isLoading = false)
+        }
+
+        val article = response.data
         val page = article?.query?.pages?.firstOrNull()
         val title = state.title
         CustomText(
@@ -82,6 +88,14 @@ private fun SharedElementTransitionScope.ArticleBody(
             fontWeight = FontWeight.Bold,
         )
 
-        CustomAsyncImage(imageOrNull = state.mainImage, isDataLoading = isLoading)
+        val img = state.mainImage
+        CustomAsyncImage(
+            modifier = Modifier.customSharedElement(
+                scope = this@ArticleBody,
+                key = SharedElementKey(type = SharedElementKey.Type.Image, id = img?.source)
+            ),
+            imageOrNull = img,
+            isDataLoading = isLoading,
+        )
     }
 }

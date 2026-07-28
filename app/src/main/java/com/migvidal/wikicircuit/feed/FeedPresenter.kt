@@ -29,7 +29,7 @@ class FeedPresenter @AssistedInject constructor(
         return FeedScreen.State(response = response) {
             when (it) {
                 is FeedScreen.State.Event.ItemClicked -> {
-                    navigator.goTo(ArticleScreen(titles = it.titles, mainImage = it.mainImage))
+                    navigator.goTo(ArticleScreen(titles = it.titles, mainImage = it.mainImage, mostReadInfo = it.mostRead))
                 }
 
                 is FeedScreen.State.Event.ImageClicked -> {}

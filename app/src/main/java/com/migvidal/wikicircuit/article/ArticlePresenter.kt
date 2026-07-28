@@ -38,6 +38,7 @@ class ArticlePresenter @AssistedInject constructor(
             mainImage = articleScreen.mainImage,
             response = article,
             isFavorite = false,
+            mostReadInfo = articleScreen.mostReadInfo,
         ) {
             when (it) {
                 is ArticleScreen.State.Event.BackClicked -> navigator.pop()

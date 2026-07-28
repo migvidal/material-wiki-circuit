@@ -8,7 +8,6 @@ import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.annotation.DrawableRes
 import androidx.annotation.StringRes
-import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.ExperimentalSharedTransitionApi
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.padding
@@ -96,20 +95,17 @@ class MainActivity : ComponentActivity() {
                         )
                     },
                     bottomBar = {
-                        val bottomBarVisible = currentScreen !is ArticleScreen
-                        AnimatedVisibility(visible = bottomBarVisible) {
-                            BottomBar(
-                                tabs = tabs,
-                                currentTab = tabs.find { it.screen == currentScreen },
-                                onClick = { tab ->
-                                    navigator.resetRoot(
-                                        newRoot = tab.screen,
-                                        saveState = true,
-                                        restoreState = true,
-                                    )
-                                },
-                            )
-                        }
+                        BottomBar(
+                            tabs = tabs,
+                            currentTab = tabs.find { it.screen == backStack.rootRecord?.screen },
+                            onClick = { tab ->
+                                navigator.resetRoot(
+                                    newRoot = tab.screen,
+                                    saveState = true,
+                                    restoreState = true,
+                                )
+                            },
+                        )
                     }
                 ) { padding ->
                     Box(modifier = Modifier.padding(padding)) {

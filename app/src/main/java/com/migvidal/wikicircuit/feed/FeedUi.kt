@@ -1,16 +1,13 @@
 package com.migvidal.wikicircuit.feed
 
+import androidx.compose.animation.ExperimentalSharedTransitionApi
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -18,21 +15,25 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.dropShadow
 import androidx.compose.ui.graphics.RectangleShape
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
-import com.migvidal.wikicircuit.R
 import com.migvidal.wikicircuit.core.ui.RequestStatus
+import com.migvidal.wikicircuit.core.ui.SharedElementKey
 import com.migvidal.wikicircuit.core.ui.components.CardWithImage
 import com.migvidal.wikicircuit.core.ui.components.CustomAsyncImage
 import com.migvidal.wikicircuit.core.ui.components.CustomCarouselLayoutCard
 import com.migvidal.wikicircuit.core.ui.components.CustomElevatedCard
 import com.migvidal.wikicircuit.core.ui.components.CustomPreHeading
 import com.migvidal.wikicircuit.core.ui.components.CustomText
+import com.migvidal.wikicircuit.core.ui.components.MostRead
+import com.migvidal.wikicircuit.core.ui.components.MostReadInfo
+import com.migvidal.wikicircuit.core.ui.components.customSharedBounds
+import com.migvidal.wikicircuit.core.ui.components.customSharedElement
 import com.migvidal.wikicircuit.feed.FeedModel.MostRead.MostReadArticle
 import com.migvidal.wikicircuit.feed.FeedModel.OnThisDay.OnThisDayPage
 import com.migvidal.wikicircuit.feed.FeedScreen.State.Event.ImageClicked
 import com.migvidal.wikicircuit.feed.FeedScreen.State.Event.ItemClicked
+import com.slack.circuit.sharedelements.SharedElementTransitionScope
 
 @Composable
 fun FeedUi(state: FeedScreen.State, modifier: Modifier = Modifier) {
@@ -91,12 +92,22 @@ private fun FeedBody(
             Featured(
                 modifier = Modifier
                     .then(cardPadding)
-                    .padding(horizontal = 16.dp), featuredArticle = featured, isLoading = isLoading
+                    .padding(horizontal = 16.dp),
+                featuredArticle = featured,
+                isLoading = isLoading,
+                onClick = {
+                    state.eventSink(
+                        ItemClicked(
+                            titles = featured?.titles ?: return@Featured,
+                            mainImage = featured.originalimage,
+                        )
+                    )
+                }
             )
         }
         item {
             val mostRead = feed?.mostread
-            MostRead(
+            MostReadSection(
                 modifier = Modifier.then(cardPadding),
                 mostRead = mostRead,
                 isLoading = isLoading,
@@ -105,6 +116,10 @@ private fun FeedBody(
                         ItemClicked(
                             titles = item.titles,
                             mainImage = item.originalimage,
+                            mostRead = MostRead(
+                                rank = item.rank,
+                                views = item.views,
+                            )
                         )
                     )
                 }
@@ -182,39 +197,66 @@ private fun ImageOfTheDay(
     }
 }
 
+@OptIn(ExperimentalSharedTransitionApi::class)
 @Composable
 private fun Featured(
     featuredArticle: FeedModel.FeaturedArticle?,
     isLoading: Boolean,
+    onClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    CardWithImage(
-        modifier = modifier,
-        image = {
-            CustomAsyncImage(
-                imageOrNull = featuredArticle?.originalimage,
-                isDataLoading = isLoading,
+    SharedElementTransitionScope {
+        val title = featuredArticle?.titles?.normalized
+        CardWithImage(
+            modifier = modifier,
+            id = title,
+            image = {
+                val img = featuredArticle?.originalimage
+                CustomAsyncImage(
+                    modifier = Modifier.customSharedElement(
+                        scope = this@SharedElementTransitionScope,
+                        key = SharedElementKey(
+                            type = SharedElementKey.Type.Image,
+                            id = img?.source
+                        ),
+                    ),
+                    imageOrNull = img,
+                    isDataLoading = isLoading,
+                )
+            },
+            onClick = onClick,
+        ) {
+            CustomPreHeading(textOrNull = "Featured", isLoading = isLoading)
+            CustomText(
+                modifier = Modifier.customSharedElement(
+                    scope = this@SharedElementTransitionScope,
+                    key = SharedElementKey(type = SharedElementKey.Type.Title, id = title)
+                ),
+                textOrNull = title,
+                isLoading = isLoading,
+                style = MaterialTheme.typography.titleLarge,
             )
-        },
-        onClick = {},
-    ) {
-        CustomPreHeading(textOrNull = "Featured", isLoading = isLoading)
-        CustomText(
-            textOrNull = featuredArticle?.titles?.normalized,
-            isLoading = isLoading,
-            style = MaterialTheme.typography.titleLarge,
-        )
 
-        CustomText(
-            textOrNull = featuredArticle?.description,
-            isLoading = isLoading,
-        )
+            val description = featuredArticle?.description
+            CustomText(
+                modifier = Modifier.customSharedElement(
+                    scope = this@SharedElementTransitionScope,
+                    key = SharedElementKey(
+                        type = SharedElementKey.Type.Description,
+                        id = description,
+                    )
+                ),
+                textOrNull = description,
+                isLoading = isLoading,
+            )
+        }
+
     }
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
+@OptIn(ExperimentalMaterial3Api::class, ExperimentalSharedTransitionApi::class)
 @Composable
-private fun MostRead(
+private fun MostReadSection(
     mostRead: FeedModel.MostRead?,
     isLoading: Boolean,
     onItemClicked: (MostReadArticle) -> Unit,
@@ -225,61 +267,62 @@ private fun MostRead(
         isLoading = isLoading,
         header = {
             CustomPreHeading(
-                modifier = Modifier.padding(vertical = 8.dp),
                 textOrNull = "Most read · ${mostRead?.date}",
                 isLoading = isLoading,
             )
         },
         carouselItems = mostRead?.articles ?: emptyList(),
         carouselItem = { item ->
-            val img = item?.originalimage
-            val titles = item?.titles
-            CardWithImage(
-                modifier = Modifier.padding(horizontal = 8.dp),
-                onClick = {
-                    item?.let { onItemClicked(it) }
-                },
-                image = {
-                    CustomAsyncImage(
-                        imageOrNull = img,
-                        isDataLoading = isLoading,
-                    )
-                }
-            ) {
-                Column(modifier = Modifier.padding(8.dp)) {
-                    Row(verticalAlignment = Alignment.Bottom) {
-                        CustomText(
-                            textOrNull = "#${item?.rank}",
-                            isLoading = isLoading,
-                            fontWeight = FontWeight.Bold,
-                        )
-                        Spacer(modifier = Modifier.size(8.dp))
-                        if (!isLoading) {
-                            Icon(
-                                modifier = Modifier.size(16.dp),
-                                painter = painterResource(R.drawable.bar_chart),
-                                contentDescription = "Views",
-                            )
-                        }
-                        CustomText(
-                            textOrNull = item?.views.toString(),
-                            isLoading = isLoading,
-                            fontWeight = FontWeight.Bold,
+            SharedElementTransitionScope {
+                val img = item?.originalimage
+                val titles = item?.titles
+                val title = titles?.normalized
+                CardWithImage(
+                    modifier = Modifier
+                        .padding(horizontal = 8.dp),
+                    id = title,
+                    onClick = {
+                        item?.let { onItemClicked(it) }
+                    },
+                    image = {
+                        CustomAsyncImage(
+                            modifier = Modifier.customSharedElement(
+                                scope = this@SharedElementTransitionScope,
+                                key = SharedElementKey(
+                                    type = SharedElementKey.Type.Image,
+                                    id = img?.source,
+                                )
+                            ),
+                            imageOrNull = img,
+                            isDataLoading = isLoading,
                         )
                     }
-                    CustomText(
-                        textOrNull = titles?.normalized,
-                        isLoading = isLoading,
-                        style = MaterialTheme.typography.titleLarge,
-                    )
+                ) {
+                    Column(modifier = Modifier.padding(8.dp)) {
+                        val mostRead = item?.run { MostRead(rank, views) }
+
+                        mostRead?.let { MostReadInfo(mostRead = it, isLoading = isLoading) }
+
+                        CustomText(
+                            modifier = Modifier.customSharedElement(
+                                scope = this@SharedElementTransitionScope,
+                                key = SharedElementKey(
+                                    type = SharedElementKey.Type.Title,
+                                    id = title,
+                                )
+                            ),
+                            textOrNull = title,
+                            isLoading = isLoading,
+                            style = MaterialTheme.typography.titleLarge,
+                        )
+                    }
                 }
             }
-
         }
     )
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
+@OptIn(ExperimentalMaterial3Api::class, ExperimentalSharedTransitionApi::class)
 @Composable
 private fun OnThisDayItem(
     onThisDay: FeedModel.OnThisDay?,
@@ -304,21 +347,41 @@ private fun OnThisDayItem(
         },
         carouselItems = onThisDay?.pages ?: emptyList(),
         carouselItem = { page ->
-            CardWithImage(
-                modifier = Modifier.padding(horizontal = 8.dp),
-                onClick = { page?.let { onitemClicked(it) } },
-                image = {
-                    CustomAsyncImage(
-                        imageOrNull = page?.originalimage,
-                        isDataLoading = isLoading,
+            SharedElementTransitionScope {
+                val title = page?.titles?.normalized
+                CardWithImage(
+                    modifier = Modifier
+                        .padding(horizontal = 8.dp),
+                    id = title,
+                    onClick = { page?.let { onitemClicked(it) } },
+                    image = {
+                        val img = page?.originalimage
+                        CustomAsyncImage(
+                            modifier = Modifier.customSharedBounds(
+                                scope = this@SharedElementTransitionScope,
+                                key = SharedElementKey(
+                                    type = SharedElementKey.Type.Image,
+                                    id = img?.source,
+                                )
+                            ),
+                            imageOrNull = img,
+                            isDataLoading = isLoading,
+                        )
+                    }
+                ) {
+                    CustomText(
+                        modifier = Modifier.customSharedBounds(
+                            scope = this@SharedElementTransitionScope,
+                            key = SharedElementKey(
+                                type = SharedElementKey.Type.Title,
+                                id = title,
+                            )
+                        ),
+                        textOrNull = title,
+                        isLoading = isLoading,
+                        style = MaterialTheme.typography.titleLarge,
                     )
                 }
-            ) {
-                CustomText(
-                    textOrNull = page?.titles?.normalized,
-                    isLoading = isLoading,
-                    style = MaterialTheme.typography.titleLarge,
-                )
             }
         }
     )
