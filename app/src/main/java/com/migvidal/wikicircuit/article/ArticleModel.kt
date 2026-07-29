@@ -8,26 +8,21 @@ import kotlinx.serialization.Serializable
 @Serializable
 data class ArticleModel(
     val `continue`: Continue? = null,
-    val query: Query<PageWithImages>,
+    val query: Query<PageWithProps>,
 ) {
     @Serializable
     data class Continue(
-        val imcontinue: String,
         val `continue`: String,
     )
 
     @Serializable
-    data class PageWithImages(
+    data class PageWithProps(
         override val title: String,
         override val pageid: Int? = null,
         val ns: Int,
-        @SerialName("images") val images: List<ArticleImage>? = null,
         val pageprops: PageProps,
         @SerialName("canonicalurl") val canonicalUrl: String,
     ) : Page {
-
-        @Serializable
-        data class ArticleImage(val title: String)
 
         @Serializable
         data class PageProps(

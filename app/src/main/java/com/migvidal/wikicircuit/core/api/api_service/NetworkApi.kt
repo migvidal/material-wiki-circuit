@@ -72,8 +72,10 @@ class NetworkApi @Inject constructor(private val httpClient: HttpClient) :
 }
 
 private fun StringValuesBuilder.appendArticleParams() {
-    append(name = "prop", value = "images|info|pageprops")
+    append(name = "prop", value = "info|pageprops")
     append(name = "inprop", value = "url")
+    append(name = "list", value = "allimages")
+    append(name = "aiprop", value = "url|size|mediatype|extmetadata")
 }
 
 private fun Int.paddedLeading(): String {

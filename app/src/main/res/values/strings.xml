@@ -2,6 +2,6 @@
     <string name="app_name">WikiCircuit</string>
     <string name="search">Search</string>
     <string name="feed">Feed</string>
-    <string name="detail">Detail</string>
+    <string name="article">Article</string>
     <string name="back">Back</string>
 </resources>

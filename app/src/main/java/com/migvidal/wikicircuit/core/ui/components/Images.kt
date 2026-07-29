@@ -25,6 +25,7 @@ import coil3.request.ImageRequest
 import com.migvidal.wikicircuit.R
 import com.migvidal.wikicircuit.core.USER_AGENT_KEY
 import com.migvidal.wikicircuit.core.api.common_model.ApiImage
+import com.migvidal.wikicircuit.core.api.common_model.ApiSimpleImage
 import com.migvidal.wikicircuit.core.getUserAgent
 import com.migvidal.wikicircuit.core.ui.RequestStatus
 
@@ -76,7 +77,7 @@ fun CustomAsyncImage(
             .animateContentSize()
     ) {
         val request = ImageRequest.Builder(context)
-            .data(imageOrNull?.source)
+            .data(imageOrNull?.source ?: imageOrNull?.url)
             .httpHeaders(headers)
             .build()
 

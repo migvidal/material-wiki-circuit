@@ -138,7 +138,7 @@ fun TopBar(
                 text = when (currentScreen) {
                     SearchScreen -> stringResource(R.string.search)
                     FeedScreen -> stringResource(R.string.feed)
-                    is ArticleScreen -> stringResource(R.string.detail)
+                    is ArticleScreen -> stringResource(R.string.article)
                     else -> ""
                 }
             )
