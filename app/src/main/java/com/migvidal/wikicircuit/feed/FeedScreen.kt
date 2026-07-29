@@ -10,6 +10,7 @@ import kotlinx.parcelize.Parcelize
 @Parcelize
 object FeedScreen : Screen {
     data class State(
+        val connected: Boolean,
         val response: CachedFeedResponse,
         val eventSink: (Event) -> Unit,
     ) : CircuitUiState {

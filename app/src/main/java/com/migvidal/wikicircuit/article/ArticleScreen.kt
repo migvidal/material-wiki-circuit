@@ -17,6 +17,7 @@ data class ArticleScreen(
 ) : Screen {
 
     data class State(
+        val connected: Boolean,
         val title: String,
         val mainImage: ApiSimpleImage?,
         val response: CachedArticleResponse,

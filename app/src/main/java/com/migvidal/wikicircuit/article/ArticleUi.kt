@@ -28,9 +28,11 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.pointer.consumePositionChange
 import androidx.compose.ui.input.pointer.pointerInput
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.coerceIn
 import androidx.compose.ui.unit.dp
+import com.migvidal.wikicircuit.R
 import com.migvidal.wikicircuit.core.ui.RequestStatus
 import com.migvidal.wikicircuit.core.ui.SharedElementKey
 import com.migvidal.wikicircuit.core.ui.components.CustomAsyncImage
@@ -51,9 +53,12 @@ fun ArticleUi(state: ArticleScreen.State, modifier: Modifier = Modifier) {
                     key = SharedElementKey(type = SharedElementKey.Type.Card, id = state.title),
                 ),
         ) {
+            val connected = state.connected
             val response = state.response
-            when (val status = response.status) {
-                is RequestStatus.Failure -> Text(text = status.message)
+            val status = response.status
+            when {
+                !connected ->Text(text = stringResource(R.string.no_internet))
+                status is RequestStatus.Failure -> Text(text = status.message)
                 else -> ArticleBody(state = state)
             }
         }

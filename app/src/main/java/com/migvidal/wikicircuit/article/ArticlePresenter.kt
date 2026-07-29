@@ -3,6 +3,7 @@ package com.migvidal.wikicircuit.article
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.migvidal.wikicircuit.core.NetworkManager
 import com.slack.circuit.codegen.annotations.CircuitInject
 import com.slack.circuit.runtime.Navigator
 import com.slack.circuit.runtime.presenter.Presenter
@@ -15,6 +16,7 @@ class ArticlePresenter @AssistedInject constructor(
     @Assisted val navigator: Navigator,
     @Assisted val articleScreen: ArticleScreen,
     val articleRepository: ArticleRepository,
+    val networkManager: NetworkManager,
 ) : Presenter<ArticleScreen.State> {
 
     @Composable
@@ -22,6 +24,7 @@ class ArticlePresenter @AssistedInject constructor(
         val article = articleRepository.response.collectAsStateWithLifecycle().value
         val titleFromArticle = article.data?.query?.pages?.firstOrNull()?.title
         val titlesFromScreen = articleScreen.titles
+        val connected = networkManager.isConnected.collectAsStateWithLifecycle().value
 
         LaunchedEffect(Unit) {
             titlesFromScreen?.canonical?.let {
@@ -34,6 +37,7 @@ class ArticlePresenter @AssistedInject constructor(
         }
 
         return ArticleScreen.State(
+            connected = connected,
             title = titlesFromScreen?.normalized ?: titleFromArticle ?: "Article",
             mainImage = articleScreen.mainImage,
             response = article,

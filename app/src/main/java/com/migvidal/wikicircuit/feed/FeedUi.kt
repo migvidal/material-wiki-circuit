@@ -15,8 +15,10 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.dropShadow
 import androidx.compose.ui.graphics.RectangleShape
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import com.migvidal.wikicircuit.R
 import com.migvidal.wikicircuit.core.ui.RequestStatus
 import com.migvidal.wikicircuit.core.ui.SharedElementKey
 import com.migvidal.wikicircuit.core.ui.components.CardWithImage
@@ -39,8 +41,11 @@ import com.slack.circuit.sharedelements.SharedElementTransitionScope
 fun FeedUi(state: FeedScreen.State, modifier: Modifier = Modifier) {
     Column(modifier = modifier) {
         val response = state.response
-        when (val status = response.status) {
-            is RequestStatus.Failure -> Text(text = status.message)
+        val status = response.status
+        val connected = state.connected
+        when {
+            !connected -> Text(stringResource(R.string.no_internet))
+            status is RequestStatus.Failure -> Text(text = status.message)
             else -> FeedBody(state = state)
         }
     }
