@@ -3,7 +3,7 @@ package com.migvidal.wikicircuit.core.api.api_service
 import android.content.Context
 import android.content.res.Resources
 import com.migvidal.wikicircuit.R
-import com.migvidal.wikicircuit.article.ArticleModel
+import com.migvidal.wikicircuit.page.common.PageModel
 import com.migvidal.wikicircuit.feed.FeedModel
 import com.migvidal.wikicircuit.search.SearchModel
 import dagger.hilt.android.qualifiers.ApplicationContext
@@ -22,16 +22,16 @@ class FakeOfflineApi @Inject constructor(@param:ApplicationContext private val c
     ApiService {
     private val resources: Resources = context.resources
 
-    override suspend fun getArticleByTitle(title: String): ArticleModel {
+    override suspend fun getPageByTitle(title: String): PageModel {
         val inputStream = resources.openRawResource(R.raw.article)
         delay(FAKE_DELAY)
-        return json.decodeFromStream<ArticleModel>(inputStream)
+        return json.decodeFromStream<PageModel>(inputStream)
     }
 
-    override suspend fun getArticleById(pageId: Int): ArticleModel {
+    override suspend fun getPageById(pageId: Int): PageModel {
         val inputStream = resources.openRawResource(R.raw.article)
         delay(FAKE_DELAY)
-        return json.decodeFromStream<ArticleModel>(inputStream)
+        return json.decodeFromStream<PageModel>(inputStream)
     }
 
     override suspend fun getSearch(term: String): SearchModel {

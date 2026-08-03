@@ -3,7 +3,7 @@ package com.migvidal.wikicircuit.feed
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.migvidal.wikicircuit.article.ArticleScreen
+import com.migvidal.wikicircuit.page.article.ArticleScreen
 import com.migvidal.wikicircuit.core.NetworkManager
 import com.slack.circuit.codegen.annotations.CircuitInject
 import com.slack.circuit.runtime.Navigator

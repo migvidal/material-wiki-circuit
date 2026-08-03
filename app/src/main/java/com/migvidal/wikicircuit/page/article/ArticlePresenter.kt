@@ -1,4 +1,4 @@
-package com.migvidal.wikicircuit.article
+package com.migvidal.wikicircuit.page.article
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -15,26 +15,27 @@ import dagger.hilt.components.SingletonComponent
 class ArticlePresenter @AssistedInject constructor(
     @Assisted val navigator: Navigator,
     @Assisted val articleScreen: ArticleScreen,
-    val articleRepository: ArticleRepository,
+    val articleProvider: ArticleProvider,
     val networkManager: NetworkManager,
 ) : Presenter<ArticleScreen.State> {
 
     @Composable
     override fun present(): ArticleScreen.State {
-        val article = articleRepository.response.collectAsStateWithLifecycle().value
-        val titleFromArticle = article.data?.query?.pages?.firstOrNull()?.title
         val titlesFromScreen = articleScreen.titles
-        val connected = networkManager.isConnected.collectAsStateWithLifecycle().value
 
         LaunchedEffect(Unit) {
             titlesFromScreen?.canonical?.let {
-                articleRepository.fetchArticle(it)
+                articleProvider.fetchArticle(it)
                 return@LaunchedEffect
             }
             articleScreen.pageId?.let {
-                articleRepository.fetchArticle(it)
+                articleProvider.fetchArticle(it)
             }
         }
+
+        val connected = networkManager.isConnected.collectAsStateWithLifecycle().value
+        val article = articleProvider.response.collectAsStateWithLifecycle().value
+        val titleFromArticle = article.data?.title
 
         return ArticleScreen.State(
             connected = connected,

@@ -24,23 +24,23 @@ import coil3.network.httpHeaders
 import coil3.request.ImageRequest
 import com.migvidal.wikicircuit.R
 import com.migvidal.wikicircuit.core.USER_AGENT_KEY
-import com.migvidal.wikicircuit.core.api.common_model.ApiImage
-import com.migvidal.wikicircuit.core.api.common_model.ApiSimpleImage
 import com.migvidal.wikicircuit.core.getUserAgent
 import com.migvidal.wikicircuit.core.ui.RequestStatus
 
+
+private const val DEFAULT_IMAGE_ASPECT_RATIO = 3 / 2f
+
 @Composable
 fun CustomAsyncImage(
-    imageOrNull: ApiImage?,
+    urlOrNull: String?,
     isDataLoading: Boolean,
     modifier: Modifier = Modifier,
-    cropped: Boolean = true,
+    aspectRatio: Float? = null,
 ) {
     var imageStatus by remember { mutableStateOf<RequestStatus>(RequestStatus.Loading) }
-    val defaultRatio = 3 / 2f
-    val boxModifier = if (imageOrNull == null && isDataLoading) {
+    val boxModifier = if (urlOrNull == null && isDataLoading) {
         Modifier
-            .aspectRatio(defaultRatio)
+            .aspectRatio(DEFAULT_IMAGE_ASPECT_RATIO)
             .shimmer()
     } else {
         when (imageStatus) {
@@ -49,17 +49,12 @@ fun CustomAsyncImage(
             }
 
             RequestStatus.Success -> {
-                if (imageOrNull != null) {
-                    val imageRatio = imageOrNull.width / imageOrNull.height.toFloat()
-                    Modifier.aspectRatio(if (cropped) defaultRatio else imageRatio)
-                } else {
-                    Modifier
-                }
+                Modifier.aspectRatio(aspectRatio ?: DEFAULT_IMAGE_ASPECT_RATIO)
             }
 
             RequestStatus.Loading -> {
                 Modifier
-                    .aspectRatio(defaultRatio)
+                    .aspectRatio(DEFAULT_IMAGE_ASPECT_RATIO)
                     .shimmer()
             }
         }
@@ -68,7 +63,7 @@ fun CustomAsyncImage(
     val context = LocalContext.current
     val headers = NetworkHeaders.Builder().add(USER_AGENT_KEY, getUserAgent(context)).build()
 
-    val isVisible = isDataLoading || (imageStatus !is RequestStatus.Failure && imageOrNull != null)
+    val isVisible = isDataLoading || (imageStatus !is RequestStatus.Failure && urlOrNull != null)
 
     Box(
         modifier = modifier
@@ -77,7 +72,7 @@ fun CustomAsyncImage(
             .animateContentSize()
     ) {
         val request = ImageRequest.Builder(context)
-            .data(imageOrNull?.source ?: imageOrNull?.url)
+            .data(urlOrNull)
             .httpHeaders(headers)
             .build()
 
@@ -86,7 +81,7 @@ fun CustomAsyncImage(
                 modifier = Modifier
                     .fillMaxWidth(),
                 model = request,
-                contentScale = if (cropped) ContentScale.Crop else ContentScale.Fit,
+                contentScale = ContentScale.Crop,
                 contentDescription = null,
                 onLoading = { imageStatus = RequestStatus.Loading },
                 onSuccess = { imageStatus = RequestStatus.Success },
@@ -96,7 +91,7 @@ fun CustomAsyncImage(
             Surface(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .aspectRatio(defaultRatio),
+                    .aspectRatio(DEFAULT_IMAGE_ASPECT_RATIO),
                 color = MaterialTheme.colorScheme.error,
             ) {
                 Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {

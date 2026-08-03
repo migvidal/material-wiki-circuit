@@ -13,7 +13,7 @@ import javax.inject.Inject
 import javax.inject.Singleton
 
 @Singleton
-class SearchRepository @Inject constructor(val api: ApiService) {
+class SearchProvider @Inject constructor(val api: ApiService) {
     private val _response = MutableStateFlow(CachedSearchResponse())
     val response = _response.asStateFlow()
 

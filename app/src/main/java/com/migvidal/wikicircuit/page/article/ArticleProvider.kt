@@ -1,0 +1,85 @@
+package com.migvidal.wikicircuit.page.article
+
+import android.util.Log
+import com.migvidal.wikicircuit.core.ui.CachedResponse
+import com.migvidal.wikicircuit.core.ui.RequestStatus
+import com.migvidal.wikicircuit.page.common.PageModel
+import com.migvidal.wikicircuit.page.common.PageModel.PageWithPropsAndImages.ImageReference
+import com.migvidal.wikicircuit.page.common.PageRepository
+import kotlinx.coroutines.CancellationException
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.update
+import java.time.Instant
+import javax.inject.Inject
+
+class ArticleProvider @Inject constructor(val pageRepository: PageRepository) {
+    private val _response = MutableStateFlow(CachedArticleResponse())
+    val response = _response.asStateFlow()
+
+    suspend fun fetchArticle(title: String) {
+        fetchArticle { pageRepository.getByTitle(title) }
+    }
+
+    suspend fun fetchArticle(id: Int) {
+        fetchArticle { pageRepository.getById(id) }
+    }
+
+    private suspend fun fetchArticle(method: suspend () -> PageModel) {
+        runCatching {
+            _response.update {
+                it.copy(status = RequestStatus.Loading)
+            }
+            method()
+        }
+            .onSuccess { data -> handleSuccess(data) }
+            .onFailure { t -> handleFailure(t) }
+    }
+
+    private suspend fun handleSuccess(pageModel: PageModel) {
+        val page = pageModel.query.pages.firstOrNull()
+        if (page == null) {
+            _response.update {
+                CachedArticleResponse(status = RequestStatus.Failure())
+            }
+            return
+        }
+        val imagesData = page.images?.map { getImage(it) } ?: emptyList()
+        val images = imagesData.mapNotNull {
+            it.query.pages.firstOrNull()?.imageInfo?.firstOrNull()
+        }
+        _response.update {
+            CachedArticleResponse(
+                data = Article(
+                    title = page.title,
+                    summary = page.pageprops?.wikibaseShortDesc ?: "",
+                    mainImg = page.imageInfo.firstOrNull(),
+                    images = images,
+                ), status = RequestStatus.Success
+            )
+        }
+    }
+
+    private suspend fun getImage(imageRef: ImageReference) =
+        pageRepository.getByTitle(imageRef.title)
+
+    private fun handleFailure(throwable: Throwable) {
+        val message = "Could not load article"
+        Log.e("ArticleRepository", message, throwable)
+        if (throwable is CancellationException) throw throwable
+        _response.update {
+            CachedArticleResponse(
+                status = RequestStatus.Failure(
+                    message = message,
+                    throwable = throwable,
+                )
+            )
+        }
+    }
+}
+
+data class CachedArticleResponse(
+    override val data: Article? = null,
+    override val lastUpdatedAt: Instant = Instant.now(),
+    override val status: RequestStatus = RequestStatus.Success
+) : CachedResponse<Article?>

@@ -1,7 +1,7 @@
 package com.migvidal.wikicircuit.core.api.api_service
 
 import androidx.compose.ui.text.intl.Locale
-import com.migvidal.wikicircuit.article.ArticleModel
+import com.migvidal.wikicircuit.page.common.PageModel
 import com.migvidal.wikicircuit.feed.FeedModel
 import com.migvidal.wikicircuit.search.SearchModel
 import io.ktor.client.HttpClient
@@ -17,7 +17,7 @@ import javax.inject.Inject
 class NetworkApi @Inject constructor(private val httpClient: HttpClient) :
     ApiService {
 
-    override suspend fun getArticleByTitle(title: String): ArticleModel {
+    override suspend fun getPageByTitle(title: String): PageModel {
         return httpClient.get("") {
             url {
                 parameters.apply {
@@ -28,7 +28,7 @@ class NetworkApi @Inject constructor(private val httpClient: HttpClient) :
         }.body()
     }
 
-    override suspend fun getArticleById(pageId: Int): ArticleModel {
+    override suspend fun getPageById(pageId: Int): PageModel {
         return httpClient.get("") {
             url {
                 parameters.apply {
@@ -44,7 +44,7 @@ class NetworkApi @Inject constructor(private val httpClient: HttpClient) :
             url {
                 parameters.apply {
                     append(name = "generator", value = "prefixsearch")
-                    append(name = "prop", value = "pageimages|pageterms|")
+                    append(name = "prop", value = "pageimages|pageterms")
                     append(name = "piprop", value = "thumbnail")
                     append(name = "prop", value = "")
                     append(name = "pithumbsize", value = "50")
@@ -72,10 +72,9 @@ class NetworkApi @Inject constructor(private val httpClient: HttpClient) :
 }
 
 private fun StringValuesBuilder.appendArticleParams() {
-    append(name = "prop", value = "info|pageprops")
+    append(name = "prop", value = "info|pageprops|images|imageinfo")
     append(name = "inprop", value = "url")
-    append(name = "list", value = "allimages")
-    append(name = "aiprop", value = "url|size|mediatype|extmetadata")
+    append(name = "iiprop", value = "url|size")
 }
 
 private fun Int.paddedLeading(): String {

@@ -1,7 +1,7 @@
 package com.migvidal.wikicircuit.feed
 
 import android.os.Parcelable
-import com.migvidal.wikicircuit.core.api.common_model.ApiSimpleImage
+import com.migvidal.wikicircuit.core.api.common_model.ApiImage
 import com.migvidal.wikicircuit.core.api.common_model.Page
 import kotlinx.parcelize.Parcelize
 import kotlinx.serialization.SerialName
@@ -21,7 +21,7 @@ data class FeedModel(
         override val title: String,
         override val pageid: Int? = null,
         override val titles: Titles,
-        override val originalimage: ApiSimpleImage? = null,
+        override val originalimage: ApiImage? = null,
         override val description: String? = null,
         override val extract: String,
         @SerialName(EXTRACT_HTML_SERIAL_NAME) override val extractHtml: String? = null,
@@ -30,7 +30,7 @@ data class FeedModel(
     @Serializable
     data class ImageOfTheDay(
         val title: String,
-        val image: ApiSimpleImage,
+        val image: ApiImage,
         @SerialName("filepage") val filePage: String? = null,
         val artist: TextWrapper,
         val credit: TextWrapper,
@@ -47,7 +47,7 @@ data class FeedModel(
             override val title: String,
             override val pageid: Int? = null,
             override val titles: Titles,
-            override val originalimage: ApiSimpleImage? = null,
+            override val originalimage: ApiImage? = null,
             override val description: String? = null,
             override val extract: String,
             @SerialName(EXTRACT_HTML_SERIAL_NAME) override val extractHtml: String? = null,
@@ -67,7 +67,7 @@ data class FeedModel(
             override val title: String,
             override val pageid: Int? = null,
             override val titles: Titles,
-            override val originalimage: ApiSimpleImage? = null,
+            override val originalimage: ApiImage? = null,
             override val description: String? = null,
             override val extract: String,
             @SerialName(EXTRACT_HTML_SERIAL_NAME) override val extractHtml: String? = null,
@@ -83,7 +83,7 @@ data class FeedModel(
 @Serializable
 sealed interface Article {
     val titles: Titles
-    val originalimage: ApiSimpleImage?
+    val originalimage: ApiImage?
     val description: String?
     val extract: String
     val extractHtml: String?

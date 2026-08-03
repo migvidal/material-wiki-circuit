@@ -1,11 +1,11 @@
 package com.migvidal.wikicircuit.core.di
 
-import com.migvidal.wikicircuit.article.ArticlePresenterFactory
-import com.migvidal.wikicircuit.article.ArticleUi
-import com.migvidal.wikicircuit.article.ArticleScreen
+import com.migvidal.wikicircuit.page.article.ArticleUi
+import com.migvidal.wikicircuit.page.article.ArticleScreen
 import com.migvidal.wikicircuit.feed.FeedPresenterFactory
 import com.migvidal.wikicircuit.feed.FeedScreen
 import com.migvidal.wikicircuit.feed.FeedUi
+import com.migvidal.wikicircuit.page.article.ArticlePresenterFactory
 import com.migvidal.wikicircuit.search.SearchUi
 import com.migvidal.wikicircuit.search.SearchPresenterFactory
 import com.migvidal.wikicircuit.search.SearchScreen

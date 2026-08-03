@@ -3,7 +3,7 @@ package com.migvidal.wikicircuit.search
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.migvidal.wikicircuit.article.ArticleScreen
+import com.migvidal.wikicircuit.page.article.ArticleScreen
 import com.migvidal.wikicircuit.core.NetworkManager
 import com.slack.circuit.codegen.annotations.CircuitInject
 import com.slack.circuit.runtime.Navigator
@@ -17,7 +17,7 @@ import kotlinx.coroutines.launch
 class SearchPresenter @AssistedInject constructor(
     @Assisted val screen: SearchScreen,
     @Assisted val navigator: Navigator,
-    val repository: SearchRepository,
+    val repository: SearchProvider,
     val networkManager: NetworkManager,
 ) :
     Presenter<SearchScreen.State> {

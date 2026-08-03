@@ -1,6 +1,6 @@
-package com.migvidal.wikicircuit.article
+package com.migvidal.wikicircuit.page.article
 
-import com.migvidal.wikicircuit.core.api.common_model.ApiSimpleImage
+import com.migvidal.wikicircuit.core.api.common_model.ApiImage
 import com.migvidal.wikicircuit.core.ui.components.MostRead
 import com.migvidal.wikicircuit.feed.Titles
 import com.slack.circuit.runtime.CircuitUiEvent
@@ -12,20 +12,21 @@ import kotlinx.parcelize.Parcelize
 data class ArticleScreen(
     val pageId: Int? = null,
     val titles: Titles? = null,
-    val mainImage: ApiSimpleImage? = null,
+    val mainImage: ApiImage? = null,
     val mostReadInfo: MostRead? = null,
 ) : Screen {
 
     data class State(
         val connected: Boolean,
         val title: String,
-        val mainImage: ApiSimpleImage?,
+        val mainImage: ApiImage?,
         val response: CachedArticleResponse,
         val isFavorite: Boolean,
         val mostReadInfo: MostRead?,
+        val allImages: List<ApiImage> = emptyList(),
         val eventSink: (Event) -> Unit,
     ) : CircuitUiState {
-        sealed interface Event: CircuitUiEvent {
+        sealed interface Event : CircuitUiEvent {
             data object BackClicked : Event
         }
     }

@@ -60,10 +60,12 @@ private fun FeedBody(
     val status = response.status
     val isLoading = status is RequestStatus.Loading
     val feed = response.data
+    val surfaceColor = MaterialTheme.colorScheme.surface
     LazyColumn(modifier = modifier) {
         val stickyModifiers = Modifier
             .padding(horizontal = 16.dp)
             .dropShadow(shape = RectangleShape) {
+                color = surfaceColor
                 alpha = .4f
                 radius = 32f
             }
@@ -180,10 +182,11 @@ private fun ImageOfTheDay(
             imageModel?.let { onClick(it) }
         },
     ) {
+        val img = imageModel?.image
         CustomAsyncImage(
-            imageOrNull = imageModel?.image,
+            urlOrNull = img?.run { url ?: source },
             isDataLoading = isLoading,
-            cropped = false
+            aspectRatio = img?.run { width / height.toFloat() },
         )
         Column(modifier = Modifier.padding(start = 16.dp, end = 16.dp, bottom = 8.dp)) {
             CustomPreHeading(textOrNull = "Image of the day", isLoading = isLoading)
@@ -225,7 +228,7 @@ private fun Featured(
                             id = img?.source
                         ),
                     ),
-                    imageOrNull = img,
+                    urlOrNull = img?.source,
                     isDataLoading = isLoading,
                 )
             },
@@ -298,7 +301,7 @@ private fun MostReadSection(
                                     id = img?.source,
                                 )
                             ),
-                            imageOrNull = img,
+                            urlOrNull = img?.source,
                             isDataLoading = isLoading,
                         )
                     }
@@ -369,7 +372,7 @@ private fun OnThisDayItem(
                                     id = img?.source,
                                 )
                             ),
-                            imageOrNull = img,
+                            urlOrNull = img?.source,
                             isDataLoading = isLoading,
                         )
                     }
