@@ -1,4 +1,4 @@
-package com.migvidal.wikicircuit.core.api.di
+package com.migvidal.wikicircuit.core.network.api.di
 
 import dagger.Module
 import dagger.Provides

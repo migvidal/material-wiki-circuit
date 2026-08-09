@@ -18,6 +18,8 @@ logbackClassic = "1.6.0"
 ktorClientOkhttpJvm = "3.5.1"
 coil = "3.5.0"
 okhttp = "5.4.0"
+coilSvg = "3.2.0"
+coilGif = "3.2.0"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
@@ -49,6 +51,8 @@ ktor-client-okhttp-jvm = { group = "io.ktor", name = "ktor-client-okhttp-jvm", v
 coil-compose = { group = "io.coil-kt.coil3", name = "coil-compose", version.ref = "coil" }
 coil-network-okhttp = { group = "io.coil-kt.coil3", name = "coil-network-okhttp", version.ref = "coil" }
 okhttp = { group = "com.squareup.okhttp3", name = "okhttp", version.ref = "okhttp" }
+coil-svg = { group = "io.coil-kt.coil3", name = "coil-svg", version.ref = "coil" }
+coil-gif = { group = "io.coil-kt.coil3", name = "coil-gif", version.ref = "coil" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }

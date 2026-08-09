@@ -1,4 +1,4 @@
-package com.migvidal.wikicircuit.core.api.api_service
+package com.migvidal.wikicircuit.core.network.api.api_service
 
 import android.content.Context
 import android.content.res.Resources

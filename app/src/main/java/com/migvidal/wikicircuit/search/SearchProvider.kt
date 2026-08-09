@@ -1,7 +1,7 @@
 package com.migvidal.wikicircuit.search
 
 import android.util.Log
-import com.migvidal.wikicircuit.core.api.api_service.ApiService
+import com.migvidal.wikicircuit.core.network.api.api_service.ApiService
 import com.migvidal.wikicircuit.core.ui.CachedResponse
 import com.migvidal.wikicircuit.core.ui.RequestStatus
 import kotlinx.coroutines.CancellationException

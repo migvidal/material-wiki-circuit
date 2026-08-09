@@ -1,8 +1,8 @@
 package com.migvidal.wikicircuit.page.common
 
-import com.migvidal.wikicircuit.core.api.common_model.ApiImage
-import com.migvidal.wikicircuit.core.api.common_model.Page
-import com.migvidal.wikicircuit.core.api.common_model.Query
+import com.migvidal.wikicircuit.core.network.api.common_model.ApiImage
+import com.migvidal.wikicircuit.core.network.api.common_model.Page
+import com.migvidal.wikicircuit.core.network.api.common_model.Query
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
@@ -23,15 +23,15 @@ data class PageModel(
         val ns: Int,
         val pageprops: PageProps? = null,
         @SerialName("canonicalurl") val canonicalUrl: String? = null,
-        val images: List<ImageReference>? = emptyList(),
+        val images: List<ImageReference>? = null,
         @SerialName("imageinfo") val imageInfo: List<ApiImage> = emptyList(),
     ) : Page {
 
         @Serializable
         data class PageProps(
             @SerialName("page_image_free") val pageImageFree: String? = null,
-            @SerialName("wikibase-shortdesc") val wikibaseShortDesc: String,
-            @SerialName("wikibase_item") val wikibaseItem: String,
+            @SerialName("wikibase-shortdesc") val wikibaseShortDesc: String? = null,
+            @SerialName("wikibase_item") val wikibaseItem: String? = null,
         )
 
         @Serializable

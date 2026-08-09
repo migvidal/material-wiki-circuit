@@ -1,6 +1,6 @@
 package com.migvidal.wikicircuit.page.common
 
-import com.migvidal.wikicircuit.core.api.api_service.ApiService
+import com.migvidal.wikicircuit.core.network.api.api_service.ApiService
 import javax.inject.Inject
 import javax.inject.Singleton
 

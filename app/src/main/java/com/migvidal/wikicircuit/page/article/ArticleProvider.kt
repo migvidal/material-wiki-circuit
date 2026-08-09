@@ -1,6 +1,7 @@
 package com.migvidal.wikicircuit.page.article
 
 import android.util.Log
+import com.migvidal.wikicircuit.core.network.api.common_model.ImageDto
 import com.migvidal.wikicircuit.core.ui.CachedResponse
 import com.migvidal.wikicircuit.core.ui.RequestStatus
 import com.migvidal.wikicircuit.page.common.PageModel
@@ -46,16 +47,23 @@ class ArticleProvider @Inject constructor(val pageRepository: PageRepository) {
         }
         val imagesData = page.images?.map { getImage(it) } ?: emptyList()
         val images = imagesData.mapNotNull {
-            it.query.pages.firstOrNull()?.imageInfo?.firstOrNull()
+            val img = it.query.pages.firstOrNull()?.imageInfo?.firstOrNull()
+                ?: return@mapNotNull null
+            ImageDto(img.width, img.height, img.source ?: img.url)
         }
+
+        val mainImg = page.imageInfo.firstOrNull()?.run {
+            ImageDto(height = height, width = width, url = source ?: url)
+        }
+
         _response.update {
             CachedArticleResponse(
                 data = Article(
                     title = page.title,
                     summary = page.pageprops?.wikibaseShortDesc ?: "",
-                    mainImg = page.imageInfo.firstOrNull(),
+                    mainImg = mainImg,
                     images = images,
-                ), status = RequestStatus.Success
+                ),
             )
         }
     }

@@ -1,8 +1,7 @@
 package com.migvidal.wikicircuit.search
 
-import com.migvidal.wikicircuit.core.api.common_model.Page
-import com.migvidal.wikicircuit.core.api.common_model.Query
-import kotlinx.serialization.SerialName
+import com.migvidal.wikicircuit.core.network.api.common_model.Page
+import com.migvidal.wikicircuit.core.network.api.common_model.Query
 import kotlinx.serialization.Serializable
 
 @Serializable

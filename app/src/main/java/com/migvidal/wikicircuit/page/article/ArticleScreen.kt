@@ -1,6 +1,7 @@
 package com.migvidal.wikicircuit.page.article
 
-import com.migvidal.wikicircuit.core.api.common_model.ApiImage
+import com.migvidal.wikicircuit.core.network.api.common_model.ApiImage
+import com.migvidal.wikicircuit.core.network.api.common_model.ImageDto
 import com.migvidal.wikicircuit.core.ui.components.MostRead
 import com.migvidal.wikicircuit.feed.Titles
 import com.slack.circuit.runtime.CircuitUiEvent
@@ -19,7 +20,7 @@ data class ArticleScreen(
     data class State(
         val connected: Boolean,
         val title: String,
-        val mainImage: ApiImage?,
+        val mainImage: ImageDto?,
         val response: CachedArticleResponse,
         val isFavorite: Boolean,
         val mostReadInfo: MostRead?,

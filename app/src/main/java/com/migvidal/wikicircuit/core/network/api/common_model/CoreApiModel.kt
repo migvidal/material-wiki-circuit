@@ -1,4 +1,4 @@
-package com.migvidal.wikicircuit.core.api.common_model
+package com.migvidal.wikicircuit.core.network.api.common_model
 
 import android.os.Parcelable
 import kotlinx.parcelize.Parcelize
@@ -23,11 +23,23 @@ data class Query<out T : Page>(
 
 }
 
+sealed interface Sizeable{
+    val height: Int
+    val width: Int
+}
+
 @Serializable
 @Parcelize
 data class ApiImage(
-    val height: Int,
-    val width: Int,
+    override val height: Int,
+    override val width: Int,
     val source: String? = null,
     val url: String? = null,
-) : Parcelable
+) : Parcelable, Sizeable
+
+@Parcelize
+data class ImageDto(
+    override val height: Int,
+    override val width: Int,
+    val url: String?,
+): Sizeable, Parcelable

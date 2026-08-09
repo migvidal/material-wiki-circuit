@@ -1,8 +1,8 @@
 package com.migvidal.wikicircuit.feed
 
 import android.os.Parcelable
-import com.migvidal.wikicircuit.core.api.common_model.ApiImage
-import com.migvidal.wikicircuit.core.api.common_model.Page
+import com.migvidal.wikicircuit.core.network.api.common_model.ApiImage
+import com.migvidal.wikicircuit.core.network.api.common_model.Page
 import kotlinx.parcelize.Parcelize
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable

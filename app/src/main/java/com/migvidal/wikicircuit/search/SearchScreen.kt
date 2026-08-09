@@ -1,6 +1,6 @@
 package com.migvidal.wikicircuit.search
 
-import com.migvidal.wikicircuit.core.api.common_model.ApiImage
+import com.migvidal.wikicircuit.core.network.api.common_model.ApiImage
 import com.slack.circuit.runtime.CircuitUiEvent
 import com.slack.circuit.runtime.CircuitUiState
 import com.slack.circuit.runtime.screen.Screen

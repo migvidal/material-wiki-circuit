@@ -1,8 +1,8 @@
-package com.migvidal.wikicircuit.core.api.di
+package com.migvidal.wikicircuit.core.network.api.di
 
 import com.migvidal.wikicircuit.BuildConfig
-import com.migvidal.wikicircuit.core.api.api_service.FakeOfflineApi
-import com.migvidal.wikicircuit.core.api.api_service.NetworkApi
+import com.migvidal.wikicircuit.core.network.api.api_service.FakeOfflineApi
+import com.migvidal.wikicircuit.core.network.api.api_service.NetworkApi
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn

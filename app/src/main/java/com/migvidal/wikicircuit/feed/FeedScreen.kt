@@ -1,6 +1,6 @@
 package com.migvidal.wikicircuit.feed
 
-import com.migvidal.wikicircuit.core.api.common_model.ApiImage
+import com.migvidal.wikicircuit.core.network.api.common_model.ApiImage
 import com.migvidal.wikicircuit.core.ui.components.MostRead
 import com.slack.circuit.runtime.CircuitUiEvent
 import com.slack.circuit.runtime.CircuitUiState

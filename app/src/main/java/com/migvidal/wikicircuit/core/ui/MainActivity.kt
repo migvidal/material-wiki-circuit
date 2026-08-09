@@ -23,6 +23,10 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import coil3.ImageLoader
+import coil3.compose.setSingletonImageLoaderFactory
+import coil3.request.crossfade
+import coil3.util.DebugLogger
 import com.migvidal.wikicircuit.R
 import com.migvidal.wikicircuit.page.article.ArticleScreen
 import com.migvidal.wikicircuit.core.ui.theme.WikiCircuitTheme
@@ -57,6 +61,13 @@ class MainActivity : ComponentActivity() {
             )
         )
         setContent {
+            setSingletonImageLoaderFactory {context ->
+                ImageLoader.Builder(context)
+                    .crossfade(true)
+                    .logger(DebugLogger())
+                    .build()
+
+            }
             MainContent()
         }
     }

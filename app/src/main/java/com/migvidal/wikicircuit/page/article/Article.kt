@@ -1,10 +1,11 @@
 package com.migvidal.wikicircuit.page.article
 
-import com.migvidal.wikicircuit.core.api.common_model.ApiImage
+import com.migvidal.wikicircuit.core.network.api.common_model.ApiImage
+import com.migvidal.wikicircuit.core.network.api.common_model.ImageDto
 
 data class Article(
     val title: String,
     val summary: String,
-    val mainImg: ApiImage?,
-    val images: List<ApiImage>,
+    val mainImg: ImageDto?,
+    val images: List<ImageDto>,
 )

@@ -78,7 +78,7 @@ private fun SharedElementTransitionScope.ArticleBody(
                     )
                 ),
             textOrNull = title,
-            isLoading = isLoading,
+            isLoading = false,
             style = MaterialTheme.typography.displaySmall,
         )
 
@@ -93,7 +93,7 @@ private fun SharedElementTransitionScope.ArticleBody(
                 )
             ),
             textOrNull = summary,
-            isLoading = isLoading,
+            isLoading = false,
             fontWeight = FontWeight.Bold,
         )
 
@@ -121,10 +121,10 @@ private fun SharedElementTransitionScope.ArticleBody(
                 .clip(RoundedCornerShape(mainImageRadius))
                 .customSharedElement(
                     scope = this@ArticleBody,
-                    key = SharedElementKey(type = SharedElementKey.Type.Image, id = mainImg?.source)
+                    key = SharedElementKey(type = SharedElementKey.Type.Image, id = mainImg?.url)
                 ),
             urlOrNull = mainImg?.url,
-            isDataLoading = isLoading,
+            isDataLoading = false,
             aspectRatio = mainImgAspectRatio,
         )
 
@@ -136,8 +136,8 @@ private fun SharedElementTransitionScope.ArticleBody(
         ) {
             val default = 5
             items(count = images?.size ?: default) { index ->
-                val img = images?.get(index)
-                CustomAsyncImage(urlOrNull = img?.url, isDataLoading = isLoading)
+                val img = images?.get(index) ?: return@items
+                CustomAsyncImage(urlOrNull = img.url, isDataLoading = isLoading)
             }
         }
     }
