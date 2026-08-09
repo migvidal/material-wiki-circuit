@@ -1,4 +1,4 @@
-package com.migvidal.wikicircuit.feed
+package com.migvidal.wikicircuit.feature.feed
 
 import androidx.compose.animation.ExperimentalSharedTransitionApi
 import androidx.compose.foundation.layout.Box
@@ -31,10 +31,10 @@ import com.migvidal.wikicircuit.core.ui.components.MostRead
 import com.migvidal.wikicircuit.core.ui.components.MostReadInfo
 import com.migvidal.wikicircuit.core.ui.components.customSharedBounds
 import com.migvidal.wikicircuit.core.ui.components.customSharedElement
-import com.migvidal.wikicircuit.feed.FeedModel.MostRead.MostReadArticle
-import com.migvidal.wikicircuit.feed.FeedModel.OnThisDay.OnThisDayPage
-import com.migvidal.wikicircuit.feed.FeedScreen.State.Event.ImageClicked
-import com.migvidal.wikicircuit.feed.FeedScreen.State.Event.ItemClicked
+import com.migvidal.wikicircuit.feature.feed.FeedModel.MostRead.MostReadArticle
+import com.migvidal.wikicircuit.feature.feed.FeedModel.OnThisDay.OnThisDayPage
+import com.migvidal.wikicircuit.feature.feed.FeedScreen.State.Event.ImageClicked
+import com.migvidal.wikicircuit.feature.feed.FeedScreen.State.Event.ItemClicked
 import com.slack.circuit.sharedelements.SharedElementTransitionScope
 
 @Composable

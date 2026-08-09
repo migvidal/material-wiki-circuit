@@ -1,8 +1,8 @@
 package com.migvidal.wikicircuit.core.network.api.api_service
 
-import com.migvidal.wikicircuit.page.common.PageModel
-import com.migvidal.wikicircuit.feed.FeedModel
-import com.migvidal.wikicircuit.search.SearchModel
+import com.migvidal.wikicircuit.feature.page.common.PageModel
+import com.migvidal.wikicircuit.feature.feed.FeedModel
+import com.migvidal.wikicircuit.feature.search.SearchModel
 import java.time.LocalDate
 
 interface ApiService {

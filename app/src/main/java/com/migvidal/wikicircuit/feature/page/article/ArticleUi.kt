@@ -1,4 +1,4 @@
-package com.migvidal.wikicircuit.page.article
+package com.migvidal.wikicircuit.feature.page.article
 
 import androidx.compose.animation.ExperimentalSharedTransitionApi
 import androidx.compose.animation.core.animateDpAsState

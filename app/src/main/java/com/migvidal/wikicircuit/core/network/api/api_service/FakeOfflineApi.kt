@@ -3,9 +3,9 @@ package com.migvidal.wikicircuit.core.network.api.api_service
 import android.content.Context
 import android.content.res.Resources
 import com.migvidal.wikicircuit.R
-import com.migvidal.wikicircuit.page.common.PageModel
-import com.migvidal.wikicircuit.feed.FeedModel
-import com.migvidal.wikicircuit.search.SearchModel
+import com.migvidal.wikicircuit.feature.page.common.PageModel
+import com.migvidal.wikicircuit.feature.feed.FeedModel
+import com.migvidal.wikicircuit.feature.search.SearchModel
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.delay
 import kotlinx.serialization.ExperimentalSerializationApi

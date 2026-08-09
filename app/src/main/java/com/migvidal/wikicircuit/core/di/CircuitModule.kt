@@ -1,14 +1,14 @@
 package com.migvidal.wikicircuit.core.di
 
-import com.migvidal.wikicircuit.page.article.ArticleUi
-import com.migvidal.wikicircuit.page.article.ArticleScreen
-import com.migvidal.wikicircuit.feed.FeedPresenterFactory
-import com.migvidal.wikicircuit.feed.FeedScreen
-import com.migvidal.wikicircuit.feed.FeedUi
-import com.migvidal.wikicircuit.page.article.ArticlePresenterFactory
-import com.migvidal.wikicircuit.search.SearchUi
-import com.migvidal.wikicircuit.search.SearchPresenterFactory
-import com.migvidal.wikicircuit.search.SearchScreen
+import com.migvidal.wikicircuit.feature.page.article.ArticleUi
+import com.migvidal.wikicircuit.feature.page.article.ArticleScreen
+import com.migvidal.wikicircuit.feature.feed.FeedPresenterFactory
+import com.migvidal.wikicircuit.feature.feed.FeedScreen
+import com.migvidal.wikicircuit.feature.feed.FeedUi
+import com.migvidal.wikicircuit.feature.page.article.ArticlePresenterFactory
+import com.migvidal.wikicircuit.feature.search.SearchUi
+import com.migvidal.wikicircuit.feature.search.SearchPresenterFactory
+import com.migvidal.wikicircuit.feature.search.SearchScreen
 import com.slack.circuit.foundation.Circuit
 import dagger.Module
 import dagger.Provides

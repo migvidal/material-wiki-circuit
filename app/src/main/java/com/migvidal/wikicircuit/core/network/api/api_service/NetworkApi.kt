@@ -1,9 +1,9 @@
 package com.migvidal.wikicircuit.core.network.api.api_service
 
 import androidx.compose.ui.text.intl.Locale
-import com.migvidal.wikicircuit.page.common.PageModel
-import com.migvidal.wikicircuit.feed.FeedModel
-import com.migvidal.wikicircuit.search.SearchModel
+import com.migvidal.wikicircuit.feature.page.common.PageModel
+import com.migvidal.wikicircuit.feature.feed.FeedModel
+import com.migvidal.wikicircuit.feature.search.SearchModel
 import io.ktor.client.HttpClient
 import io.ktor.client.call.body
 import io.ktor.client.request.get

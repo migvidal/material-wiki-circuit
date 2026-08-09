@@ -1,4 +1,4 @@
-package com.migvidal.wikicircuit.page.common
+package com.migvidal.wikicircuit.feature.page.common
 
 import com.migvidal.wikicircuit.core.network.api.common_model.ApiImage
 import com.migvidal.wikicircuit.core.network.api.common_model.Page

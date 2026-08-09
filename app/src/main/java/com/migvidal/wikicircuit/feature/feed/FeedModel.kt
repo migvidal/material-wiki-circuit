@@ -1,4 +1,4 @@
-package com.migvidal.wikicircuit.feed
+package com.migvidal.wikicircuit.feature.feed
 
 import android.os.Parcelable
 import com.migvidal.wikicircuit.core.network.api.common_model.ApiImage

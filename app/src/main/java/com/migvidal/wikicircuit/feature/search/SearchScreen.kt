@@ -1,4 +1,4 @@
-package com.migvidal.wikicircuit.search
+package com.migvidal.wikicircuit.feature.search
 
 import com.migvidal.wikicircuit.core.network.api.common_model.ApiImage
 import com.slack.circuit.runtime.CircuitUiEvent

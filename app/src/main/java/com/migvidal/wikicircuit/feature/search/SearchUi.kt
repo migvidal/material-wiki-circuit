@@ -1,4 +1,4 @@
-package com.migvidal.wikicircuit.search
+package com.migvidal.wikicircuit.feature.search
 
 import androidx.compose.animation.ExperimentalSharedTransitionApi
 import androidx.compose.animation.core.animateDpAsState
@@ -33,8 +33,8 @@ import com.migvidal.wikicircuit.core.ui.SharedElementKey
 import com.migvidal.wikicircuit.core.ui.components.customSharedBounds
 import com.migvidal.wikicircuit.core.ui.components.customSharedElement
 import com.migvidal.wikicircuit.core.ui.components.shimmer
-import com.migvidal.wikicircuit.search.SearchScreen.State.Event.ResultClicked
-import com.migvidal.wikicircuit.search.SearchScreen.State.Event.Search
+import com.migvidal.wikicircuit.feature.search.SearchScreen.State.Event.ResultClicked
+import com.migvidal.wikicircuit.feature.search.SearchScreen.State.Event.Search
 import com.slack.circuit.sharedelements.SharedElementTransitionScope
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay

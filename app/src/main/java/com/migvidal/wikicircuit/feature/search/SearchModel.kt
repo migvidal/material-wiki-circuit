@@ -1,4 +1,4 @@
-package com.migvidal.wikicircuit.search
+package com.migvidal.wikicircuit.feature.search
 
 import com.migvidal.wikicircuit.core.network.api.common_model.Page
 import com.migvidal.wikicircuit.core.network.api.common_model.Query

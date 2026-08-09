@@ -1,12 +1,12 @@
-package com.migvidal.wikicircuit.page.article
+package com.migvidal.wikicircuit.feature.page.article
 
 import android.util.Log
 import com.migvidal.wikicircuit.core.network.api.common_model.ImageDto
 import com.migvidal.wikicircuit.core.ui.CachedResponse
 import com.migvidal.wikicircuit.core.ui.RequestStatus
-import com.migvidal.wikicircuit.page.common.PageModel
-import com.migvidal.wikicircuit.page.common.PageModel.PageWithPropsAndImages.ImageReference
-import com.migvidal.wikicircuit.page.common.PageRepository
+import com.migvidal.wikicircuit.feature.page.common.PageModel
+import com.migvidal.wikicircuit.feature.page.common.PageModel.PageWithPropsAndImages.ImageReference
+import com.migvidal.wikicircuit.feature.page.common.PageRepository
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -49,7 +49,7 @@ class ArticleProvider @Inject constructor(val pageRepository: PageRepository) {
         val images = imagesData.mapNotNull {
             val img = it.query.pages.firstOrNull()?.imageInfo?.firstOrNull()
                 ?: return@mapNotNull null
-            ImageDto(img.width, img.height, img.source ?: img.url)
+            ImageDto(width = img.width, height = img.height, url = img.source ?: img.url)
         }
 
         val mainImg = page.imageInfo.firstOrNull()?.run {

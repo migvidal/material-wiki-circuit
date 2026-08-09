@@ -1,4 +1,4 @@
-package com.migvidal.wikicircuit.feed
+package com.migvidal.wikicircuit.feature.feed
 
 import com.migvidal.wikicircuit.core.network.api.common_model.ApiImage
 import com.migvidal.wikicircuit.core.ui.components.MostRead

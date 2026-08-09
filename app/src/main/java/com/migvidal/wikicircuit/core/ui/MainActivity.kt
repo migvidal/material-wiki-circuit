@@ -28,10 +28,10 @@ import coil3.compose.setSingletonImageLoaderFactory
 import coil3.request.crossfade
 import coil3.util.DebugLogger
 import com.migvidal.wikicircuit.R
-import com.migvidal.wikicircuit.page.article.ArticleScreen
+import com.migvidal.wikicircuit.feature.page.article.ArticleScreen
 import com.migvidal.wikicircuit.core.ui.theme.WikiCircuitTheme
-import com.migvidal.wikicircuit.feed.FeedScreen
-import com.migvidal.wikicircuit.search.SearchScreen
+import com.migvidal.wikicircuit.feature.feed.FeedScreen
+import com.migvidal.wikicircuit.feature.search.SearchScreen
 import com.slack.circuit.backstack.rememberSaveableBackStack
 import com.slack.circuit.foundation.Circuit
 import com.slack.circuit.foundation.CircuitCompositionLocals

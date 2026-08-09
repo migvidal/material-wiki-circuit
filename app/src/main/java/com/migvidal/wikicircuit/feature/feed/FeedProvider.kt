@@ -1,4 +1,4 @@
-package com.migvidal.wikicircuit.feed
+package com.migvidal.wikicircuit.feature.feed
 
 import android.util.Log
 import com.migvidal.wikicircuit.core.network.api.api_service.ApiService
@@ -14,7 +14,7 @@ import javax.inject.Inject
 import javax.inject.Singleton
 
 @Singleton
-class FeedRepository @Inject constructor(val api: ApiService) {
+class FeedProvider @Inject constructor(val api: ApiService) {
     private val _response = MutableStateFlow(CachedFeedResponse())
     val response = _response.asStateFlow()
 

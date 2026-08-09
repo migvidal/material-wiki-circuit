@@ -1,9 +1,9 @@
-package com.migvidal.wikicircuit.page.article
+package com.migvidal.wikicircuit.feature.page.article
 
 import com.migvidal.wikicircuit.core.network.api.common_model.ApiImage
 import com.migvidal.wikicircuit.core.network.api.common_model.ImageDto
 import com.migvidal.wikicircuit.core.ui.components.MostRead
-import com.migvidal.wikicircuit.feed.Titles
+import com.migvidal.wikicircuit.feature.feed.Titles
 import com.slack.circuit.runtime.CircuitUiEvent
 import com.slack.circuit.runtime.CircuitUiState
 import com.slack.circuit.runtime.screen.Screen

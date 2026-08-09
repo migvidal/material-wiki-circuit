@@ -1,4 +1,4 @@
-package com.migvidal.wikicircuit.search
+package com.migvidal.wikicircuit.feature.search
 
 import android.util.Log
 import com.migvidal.wikicircuit.core.network.api.api_service.ApiService
