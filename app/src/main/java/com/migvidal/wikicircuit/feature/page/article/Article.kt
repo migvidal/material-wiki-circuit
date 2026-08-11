@@ -1,6 +1,5 @@
 package com.migvidal.wikicircuit.feature.page.article
 
-import com.migvidal.wikicircuit.core.network.api.common_model.ApiImage
 import com.migvidal.wikicircuit.core.network.api.common_model.ImageDto
 
 data class Article(

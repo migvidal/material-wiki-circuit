@@ -13,7 +13,7 @@ import kotlinx.parcelize.Parcelize
 data class ArticleScreen(
     val pageId: Int? = null,
     val titles: Titles? = null,
-    val mainImage: ApiImage? = null,
+    val mainImage: ImageDto? = null,
     val mostReadInfo: MostRead? = null,
 ) : Screen {
 
@@ -28,7 +28,7 @@ data class ArticleScreen(
         val eventSink: (Event) -> Unit,
     ) : CircuitUiState {
         sealed interface Event : CircuitUiEvent {
-            data object BackClicked : Event
+            data class ImageClicked(val imageDto: ImageDto) : Event
         }
     }
 }

@@ -5,6 +5,7 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.migvidal.wikicircuit.feature.page.article.ArticleScreen
 import com.migvidal.wikicircuit.core.network.NetworkManager
+import com.migvidal.wikicircuit.core.network.api.common_model.ImageDto
 import com.slack.circuit.codegen.annotations.CircuitInject
 import com.slack.circuit.runtime.Navigator
 import com.slack.circuit.runtime.presenter.Presenter
@@ -28,14 +29,17 @@ class SearchPresenter @AssistedInject constructor(
         val response = repository.response.collectAsStateWithLifecycle().value
         val connected = networkManager.isConnected.collectAsStateWithLifecycle().value
 
-        return SearchScreen.State(connected = connected, response = response) {
-            when (it) {
+        return SearchScreen.State(connected = connected, response = response) { event ->
+            when (event) {
                 is SearchScreen.State.Event.ResultClicked -> {
-                    navigator.goTo(ArticleScreen(pageId = it.pageId, mainImage = it.mainImage))
+                    val imgDto = event.mainImage?.run {
+                        ImageDto(width = width, height = height, url = url ?: source)
+                    }
+                    navigator.goTo(ArticleScreen(pageId = event.pageId, mainImage = imgDto))
                 }
 
                 is SearchScreen.State.Event.Search -> {
-                    if (connected) scope.launch { repository.fetchSearch(it.term) }
+                    if (connected) scope.launch { repository.fetchSearch(event.term) }
                 }
             }
         }

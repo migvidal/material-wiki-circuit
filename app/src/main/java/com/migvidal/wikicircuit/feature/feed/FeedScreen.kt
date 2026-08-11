@@ -1,6 +1,7 @@
 package com.migvidal.wikicircuit.feature.feed
 
 import com.migvidal.wikicircuit.core.network.api.common_model.ApiImage
+import com.migvidal.wikicircuit.core.network.api.common_model.ImageDto
 import com.migvidal.wikicircuit.core.ui.components.MostRead
 import com.slack.circuit.runtime.CircuitUiEvent
 import com.slack.circuit.runtime.CircuitUiState
@@ -21,7 +22,7 @@ object FeedScreen : Screen {
                 val mostRead: MostRead? = null,
             ) : Event
 
-            data class ImageClicked(val filePage: String) : Event
+            data class ImageClicked(val image: ImageDto? = null) : Event
         }
     }
 }

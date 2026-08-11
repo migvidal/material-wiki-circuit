@@ -19,6 +19,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.migvidal.wikicircuit.R
+import com.migvidal.wikicircuit.core.network.api.common_model.ImageDto
 import com.migvidal.wikicircuit.core.ui.RequestStatus
 import com.migvidal.wikicircuit.core.ui.SharedElementKey
 import com.migvidal.wikicircuit.core.ui.components.CardWithImage
@@ -85,12 +86,15 @@ private fun FeedBody(
                 modifier = Modifier.then(cardPadding),
                 imageModel = img,
                 isLoading = isLoading,
-                onClick = { image ->
-                    image.filePage?.let {
-                        state.eventSink(
-                            ImageClicked(it)
+                onClick = {
+                    val imgDto = img?.image?.run {
+                        ImageDto(
+                            height = height,
+                            width = width,
+                            url = source ?: url,
                         )
                     }
+                    state.eventSink(ImageClicked(imgDto))
                 }
             )
         }
@@ -172,15 +176,13 @@ private fun FeedBody(
 private fun ImageOfTheDay(
     imageModel: FeedModel.ImageOfTheDay?,
     isLoading: Boolean,
-    onClick: (imageModel: FeedModel.ImageOfTheDay) -> Unit,
+    onClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
     CustomElevatedCard(
         modifier = modifier,
         shape = RectangleShape,
-        onClick = {
-            imageModel?.let { onClick(it) }
-        },
+        onClick = onClick,
     ) {
         val img = imageModel?.image
         CustomAsyncImage(

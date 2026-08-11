@@ -3,6 +3,7 @@ package com.migvidal.wikicircuit.feature.page.article
 import androidx.compose.animation.ExperimentalSharedTransitionApi
 import androidx.compose.animation.core.animateDpAsState
 import androidx.compose.animation.core.animateFloatAsState
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.lazy.staggeredgrid.LazyVerticalStaggeredGrid
@@ -20,6 +21,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.migvidal.wikicircuit.R
+import com.migvidal.wikicircuit.core.network.api.common_model.ImageDto
 import com.migvidal.wikicircuit.core.ui.RequestStatus
 import com.migvidal.wikicircuit.core.ui.SharedElementKey
 import com.migvidal.wikicircuit.core.ui.components.CustomAsyncImage
@@ -97,8 +99,24 @@ private fun SharedElementTransitionScope.ArticleBody(
             fontWeight = FontWeight.Bold,
         )
 
-        val mainImg = state.mainImage
+        this@ArticleBody.ImagesSection(
+            isLoading = status is RequestStatus.Loading,
+            article = response.data,
+            mainImage = response.data?.mainImg,
+            onImageClick = { state.eventSink(ArticleScreen.State.Event.ImageClicked(it)) },
+        )
+    }
+}
 
+@Composable
+private fun SharedElementTransitionScope.ImagesSection(
+    isLoading: Boolean,
+    article: Article?,
+    mainImage: ImageDto?,
+    onImageClick: (ImageDto) -> Unit,
+    modifier: Modifier = Modifier,
+) {
+    Column(modifier = modifier) {
         val gridState = rememberLazyStaggeredGridState()
 
         val mainImgAspectRatio by animateFloatAsState(
@@ -120,10 +138,13 @@ private fun SharedElementTransitionScope.ArticleBody(
             modifier = Modifier
                 .clip(RoundedCornerShape(mainImageRadius))
                 .customSharedElement(
-                    scope = this@ArticleBody,
-                    key = SharedElementKey(type = SharedElementKey.Type.Image, id = mainImg?.url)
-                ),
-            urlOrNull = mainImg?.url,
+                    scope = this@ImagesSection,
+                    key = SharedElementKey(type = SharedElementKey.Type.Image, id = mainImage?.url)
+                )
+                .clickable {
+                    onImageClick(mainImage ?: return@clickable)
+                },
+            urlOrNull = mainImage?.url,
             isDataLoading = false,
             aspectRatio = mainImgAspectRatio,
         )
@@ -137,7 +158,9 @@ private fun SharedElementTransitionScope.ArticleBody(
             val default = 5
             items(count = images?.size ?: default) { index ->
                 val img = images?.get(index) ?: return@items
-                CustomAsyncImage(urlOrNull = img.url, isDataLoading = isLoading)
+                CustomAsyncImage(modifier = Modifier.clickable {
+                    onImageClick(img)
+                }, urlOrNull = img.url, isDataLoading = isLoading)
             }
         }
     }

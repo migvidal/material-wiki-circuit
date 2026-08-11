@@ -5,6 +5,8 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.migvidal.wikicircuit.feature.page.article.ArticleScreen
 import com.migvidal.wikicircuit.core.network.NetworkManager
+import com.migvidal.wikicircuit.core.network.api.common_model.ImageDto
+import com.migvidal.wikicircuit.feature.page.image.ImageScreen
 import com.slack.circuit.codegen.annotations.CircuitInject
 import com.slack.circuit.runtime.Navigator
 import com.slack.circuit.runtime.presenter.Presenter
@@ -29,19 +31,29 @@ class FeedPresenter @AssistedInject constructor(
             if (connected) repository.fetchFeed()
         }
 
-        return FeedScreen.State(connected = connected, response = response) {
-            when (it) {
+        return FeedScreen.State(connected = connected, response = response) { event ->
+            when (event) {
                 is FeedScreen.State.Event.ItemClicked -> {
+                    val mainImageDto = event.mainImage?.run {
+                        ImageDto(
+                            height = height,
+                            width = width,
+                            url = url ?: source,
+                        )
+                    }
                     navigator.goTo(
                         ArticleScreen(
-                            titles = it.titles,
-                            mainImage = it.mainImage,
-                            mostReadInfo = it.mostRead,
+                            titles = event.titles,
+                            mainImage = mainImageDto,
+                            mostReadInfo = event.mostRead,
                         )
                     )
                 }
 
-                is FeedScreen.State.Event.ImageClicked -> {}
+                is FeedScreen.State.Event.ImageClicked -> {
+                    val screen = ImageScreen(event.image ?: return@State)
+                    navigator.goTo(screen)
+                }
             }
         }
     }
