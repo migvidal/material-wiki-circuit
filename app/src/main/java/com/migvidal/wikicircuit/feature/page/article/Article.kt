@@ -5,6 +5,5 @@ import com.migvidal.wikicircuit.core.network.api.common_model.ImageDto
 data class Article(
     val title: String,
     val summary: String,
-    val mainImg: ImageDto?,
     val images: List<ImageDto>,
 )

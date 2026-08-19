@@ -17,14 +17,16 @@ import com.slack.circuit.sharedelements.SharedElementTransitionScope
 fun ImageUi(state: ImageScreen.State, modifier: Modifier = Modifier) {
     SharedElementTransitionScope() {
         Box(modifier = modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-            val imgUrl = state.image?.url
+            val img = state.image
+            val imgUrl = img?.url
             CustomAsyncImage(
                 modifier = Modifier.customSharedElement(
                     scope = this@SharedElementTransitionScope,
-                    key = SharedElementKey(type = SharedElementKey.Type.Image, id = imgUrl,)
+                    key = SharedElementKey(type = SharedElementKey.Type.Image, id = imgUrl)
                 ),
                 urlOrNull = imgUrl,
                 isDataLoading = false,
+                aspectRatio = img?.run { width / height.toFloat() },
             )
         }
     }

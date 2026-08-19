@@ -52,6 +52,7 @@ fun FeedUi(state: FeedScreen.State, modifier: Modifier = Modifier) {
     }
 }
 
+@OptIn(ExperimentalSharedTransitionApi::class)
 @Composable
 private fun FeedBody(
     state: FeedScreen.State,
@@ -172,6 +173,7 @@ private fun FeedBody(
     }
 }
 
+@OptIn(ExperimentalSharedTransitionApi::class)
 @Composable
 private fun ImageOfTheDay(
     imageModel: FeedModel.ImageOfTheDay?,
@@ -185,11 +187,18 @@ private fun ImageOfTheDay(
         onClick = onClick,
     ) {
         val img = imageModel?.image
-        CustomAsyncImage(
-            urlOrNull = img?.run { url ?: source },
-            isDataLoading = isLoading,
-            aspectRatio = img?.run { width / height.toFloat() },
-        )
+        val url = img?.run { url ?: source }
+        SharedElementTransitionScope {
+            CustomAsyncImage(
+                modifier = Modifier.customSharedElement(
+                    scope = this,
+                    key = SharedElementKey(type = SharedElementKey.Type.Image, id = url)
+                ),
+                urlOrNull = url,
+                isDataLoading = isLoading,
+                aspectRatio = img?.run { width / height.toFloat() },
+            )
+        }
         Column(modifier = Modifier.padding(start = 16.dp, end = 16.dp, bottom = 8.dp)) {
             CustomPreHeading(textOrNull = "Image of the day", isLoading = isLoading)
             CustomText(

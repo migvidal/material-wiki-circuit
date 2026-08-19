@@ -52,16 +52,11 @@ class ArticleProvider @Inject constructor(val pageRepository: PageRepository) {
             ImageDto(width = img.width, height = img.height, url = img.source ?: img.url)
         }
 
-        val mainImg = page.imageInfo.firstOrNull()?.run {
-            ImageDto(height = height, width = width, url = source ?: url)
-        }
-
         _response.update {
             CachedArticleResponse(
                 data = Article(
                     title = page.title,
                     summary = page.pageprops?.wikibaseShortDesc ?: "",
-                    mainImg = mainImg,
                     images = images,
                 ),
             )

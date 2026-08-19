@@ -63,7 +63,6 @@ private fun SharedElementTransitionScope.ArticleBody(
         val response = state.response
         val status = response.status
 
-        val isLoading = status is RequestStatus.Loading
         state.mostReadInfo?.let {
             MostReadInfo(mostRead = it, isLoading = false)
         }
@@ -102,7 +101,7 @@ private fun SharedElementTransitionScope.ArticleBody(
         this@ArticleBody.ImagesSection(
             isLoading = status is RequestStatus.Loading,
             article = response.data,
-            mainImage = response.data?.mainImg,
+            mainImage = state.mainImage,
             onImageClick = { state.eventSink(ArticleScreen.State.Event.ImageClicked(it)) },
         )
     }
@@ -160,7 +159,10 @@ private fun SharedElementTransitionScope.ImagesSection(
                 val img = images?.get(index) ?: return@items
                 CustomAsyncImage(modifier = Modifier.clickable {
                     onImageClick(img)
-                }, urlOrNull = img.url, isDataLoading = isLoading)
+                }.customSharedElement(
+                    scope = this@ImagesSection,
+                    key = SharedElementKey(type = SharedElementKey.Type.Image, id = img.url)
+                ), urlOrNull = img.url, isDataLoading = isLoading)
             }
         }
     }
